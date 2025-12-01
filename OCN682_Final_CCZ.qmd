@@ -19,11 +19,16 @@ library(here)
 library(tidyverse)
 library(readr)
 library(dplyr)
+library(knitr)
+library(kableExtra)
 library(plotly)
 library(ggplot2)
 library(lubridate)
 library(purrr)
 library(wesanderson)
+library(grid)
+library(htmlwidgets)
+library(webshot2)
 ```
 
 # Brief Introduction to Deep Sea Mining
@@ -71,10 +76,8 @@ The **full ccz_ltu data set** includes the lowest taxonomic (LTU) recorded for a
 
 Using this data, the question I would like to answer is: 
 
-**How does the trophic ecology of micronekton provide evidence of connectivity between different depths in the water column?**
+**the objective of this quarto document is use the ccz_ltu data to understand which species are best to subsample** to answer my dissertation question, **how does the trophic ecology of micronekton provide evidence of connectivity between different depths in the water column?**
 
-- Though my diet data is not quite ready to be processed, I can use the full ccz_micro data set to display the species I chose to subsample and why
-    
 
 Sampling:
 
@@ -129,9 +132,9 @@ ccz_ltu_filtered <- ccz_ltu %>%
 ```
 
 
-Let's take a look at the total species presence at each depth range (not divided by site or season)
-
 # Plotting abundance per species per depth
+
+Let's take a look at the total species presence at each depth range (not divided by site or season)
 
 ```{r}
 #| echo: false
@@ -139,7 +142,7 @@ Let's take a look at the total species presence at each depth range (not divided
 #| message: false
 
 ccz_depth_ltu <- ccz_ltu_filtered %>% 
-  group_by(LTU, Family, depth_range_m) %>% ## grouping based on
+  group_by(LTU, Family, depth_range_m) %>% ## grouping based on taxonomy and depth range
   summarise(total_n = sum(n, na.rm = TRUE), .groups = "drop") %>% 
   mutate(
     depth_range_m = factor(
@@ -153,8 +156,8 @@ fish_abundance <- plot_ly(data = ccz_depth_ltu,
                           y = ~depth_range_m,
                           color = ~LTU,
                           type = "scatter", 
-                          mode = "markers",     # points only
-                          hoverinfo = "text",
+                          mode = "markers", ## points only
+                          hoverinfo = "text", ## adding hover text
                           text = ~paste(
                             "Species:", LTU,
                             "<br>Family:", Family,
@@ -170,14 +173,23 @@ fish_abundance <- plot_ly(data = ccz_depth_ltu,
     legend = list(title = list(text = "Species"))
   )
 
+outfile <- here::here("figs", "depth_abundance_plot.html")
+dir.create(dirname(outfile), recursive = TRUE, showWarnings = FALSE)
+
+saveWidget(
+  widget = fish_abundance,
+  file   = here("figs", "depth_abundance_plot.html"),
+  selfcontained = TRUE
+)
+
 fish_abundance
 ```
 
 
 
-This interactive plot provides a simple visual of the fish species present within each depth range. You can select/deselect species from the key to examine individual species! :D
+This interactive plot provides a visual of the fish species present within each depth range and their total counts (n) at each depth. You can select/deselect species from the key to examine individual species! :D
 
-I am interested in the **diets** of the **most abundant fishes**. 
+I am interested in the diets of the **most abundant fishes**. 
 
 While Cyclothone technically dominate in abundance, my focus is specifically on **non-cyclothone** micronekton since there are logistical errors in dissecting specimens from this taxonomic group.
 
@@ -200,8 +212,6 @@ Lets take a closer look at their migration behaviors divided by season with data
 
 # Kite Diagrams of Targeted Species 
 
-- Kite diagrams display changes in vertical distribution during day/night and highlight migration behaviors that are often associated with feeding
-
 ```{r}
 #| echo: false
 #| warning: false
@@ -209,21 +219,20 @@ Lets take a closer look at their migration behaviors divided by season with data
 
 target_species <- c(
   "Diaphus pacificus",
+  "Vinciguerria lucetia",
   "Diogenicthys laternatus",
+  "Argyropelecus lychnus",
   "Lampanyctus parvicauda", 
-  "Scopeloberyx malayanus", 
-  "Scopelogadus bispinosus", 
-  "Argyropelecus lychnus", 
-  "Bathylagoides nigrigenys", 
-  "Vinciguerria lucetia", 
+  "Scopelogadus bispinosus",
   "Idiacanthus antrostomus",
-  "Scopelengys tristis"
+  "Scopelengys tristis",
+  "Scopeloberyx malayanus", 
+  "Bathylagoides nigrigenys" 
 )
 
 kite_dat_combined <- ccz_ltu_filtered %>% 
   filter(LTU %in% target_species) %>% 
-  mutate(
-    # DG5B = Spring, DG5C = Fall
+  mutate( ## DG5B = Spring, DG5C = Fall
     Season = case_when(
       Cruise.Number == "DG5B" ~ "Spring",
       Cruise.Number == "DG5C" ~ "Fall",
@@ -233,11 +242,10 @@ kite_dat_combined <- ccz_ltu_filtered %>%
   ) %>% 
   group_by(LTU, Season, Tow.Type, depth_range_m) %>% 
   summarise(
-    density = sum(n.10.000.m3, na.rm = TRUE),   # PRZ + CTA combined
+    density = sum(n.10.000.m3, na.rm = TRUE), ## sites combined for simplification
     .groups = "drop"
   ) %>% 
-  mutate(
-    # exact bin edges
+  mutate( ## creating exact bin edges
     depth_top = case_when(
       depth_range_m == "0-70"      ~   0,
       depth_range_m == "70-450"    ~  70,
@@ -271,7 +279,7 @@ plot_kite_species_combined <- function(sp_name) {
     geom_rect(
       aes(
         xmin = if_else(Tow.Type == "Day", -density, 0),
-        xmax = if_else(Tow.Type == "Day",  0,        density),
+        xmax = if_else(Tow.Type == "Day", 0, density),
         ymin = depth_top,
         ymax = depth_bottom,
         fill = Tow.Type
@@ -279,7 +287,7 @@ plot_kite_species_combined <- function(sp_name) {
       color = "grey20",
       alpha = 0.95
     ) +
-    geom_vline(xintercept = 0, colour = "grey15", linewidth = 0.5) +
+    geom_vline(xintercept = 0, color = "grey15", linewidth = 0.5) +
     scale_y_reverse(
       name   = "Depth (m)",
       limits = c(1500, 0),
@@ -347,19 +355,11 @@ for (i in seq_along(target_species)) {
 </div>
 
 <div class="carousel-item">
+<img src="figs/kite_Vinciguerria_lucetia.png" class="d-block w-100">
+</div>
+
+<div class="carousel-item">
 <img src="figs/kite_Diogenicthys_laternatus.png" class="d-block w-100">
-</div>
-
-<div class="carousel-item">
-<img src="figs/kite_Lampanyctus_parvicauda.png" class="d-block w-100">
-</div>
-
-<div class="carousel-item">
-<img src="figs/kite_Scopeloberyx_malayanus.png" class="d-block w-100">
-</div>
-
-<div class="carousel-item">
-<img src="figs/kite_Scopelogadus_bispinosus.png" class="d-block w-100">
 </div>
 
 <div class="carousel-item">
@@ -367,11 +367,11 @@ for (i in seq_along(target_species)) {
 </div>
 
 <div class="carousel-item">
-<img src="figs/kite_Bathylagoides_nigrigenys.png" class="d-block w-100">
+<img src="figs/kite_Lampanyctus_parvicauda.png" class="d-block w-100">
 </div>
 
 <div class="carousel-item">
-<img src="figs/kite_Vinciguerria_lucetia.png" class="d-block w-100">
+<img src="figs/kite_Scopelogadus_bispinosus.png" class="d-block w-100">
 </div>
 
 <div class="carousel-item">
@@ -380,6 +380,14 @@ for (i in seq_along(target_species)) {
 
 <div class="carousel-item">
 <img src="figs/kite_Scopelengys_tristis.png" class="d-block w-100">
+</div>
+
+<div class="carousel-item">
+<img src="figs/kite_Bathylagoides_nigrigenys.png" class="d-block w-100">
+</div>
+
+<div class="carousel-item">
+<img src="figs/kite_Scopeloberyx_malayanus.png" class="d-block w-100">
 </div>
 
 </div>
@@ -394,8 +402,102 @@ for (i in seq_along(target_species)) {
 
 </div>
 
-What does this show us?
+**Scroll through! :D**
 
-- Micronekton can have different migration patterns (even within the same species during different seasons)
-- We can categorize species based on migration
-- Migration patterns can influence feeding behaviors
+These kite diagrams display changes in vertical distribution during day/night and highlight migration behaviors that are often associated with feeding
+
+Based on these patterns, we can categorize them based on their **migration characterization**:
+
+**Upper Oxycline Migrators**
+
+- *Diaphus pacificus*
+- *Vinciguerria lucetia*
+- *Diogenichthys laternatus*
+  
+  
+**Upper Oxycline Non-Migrator**
+
+- *Argyropelecus lychnus*
+
+
+**Lower Oxycline Migrators**
+
+- *Scopelogadus bispinosus*
+- *Idiacanthus antrostomus*
+- *Bathylagoides nigrigenys*
+- *Lampanyctus parvicauda*
+
+
+**Lower Oxycline Non-Migrators**
+
+- *Scopelengys tristis*
+- *Scopeloberyx malayanus*
+
+ 
+ 
+# Subsampling
+
+Now that our species are selected, let't subsample 100 specimens each, making sure it is proportional across samples. 
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+
+subsample_one_ltu <- function(df, total_per_ltu = 100) { ## creating a function that samples 100 specimens
+  total_available <- sum(df$n, na.rm = TRUE) ## count of total n per ltu
+  if (total_available <= total_per_ltu) { ## if less than 100 are available, sample all
+    df$subsample_n <- df$n
+    return(df)
+  }
+
+  # Otherwise, sample individuals proportionally to n
+  row_ids <- rep(seq_len(nrow(df)), df$n) ## one entry per individual
+  n_draw  <- total_per_ltu ## amount sampled
+
+  picked <- sample(row_ids, size = n_draw, replace = FALSE) ## randomly selecting 100 individuals
+
+  take_per_row <- as.integer( 
+    table(factor(picked, levels = seq_len(nrow(df))))
+  )
+
+  df$subsample_n <- take_per_row
+
+  dplyr::filter(df, subsample_n > 0) ## removing n=0s
+}
+
+subsample_all_ltu <- function(data, total_per_ltu = 100) { ## grouping by ltu
+  data %>%
+    dplyr::group_by(LTU) %>%
+    dplyr::group_modify(~ subsample_one_ltu(.x, total_per_ltu = total_per_ltu)) %>%
+    dplyr::ungroup()
+}
+
+subsampled <- ccz_ltu_filtered %>%
+  dplyr::filter(LTU %in% target_species) %>%
+  subsample_all_ltu(total_per_ltu = 100) ## applies function to data
+
+nested_table <- subsampled %>% ## making nested table of results
+  arrange(LTU, desc(subsample_n)) %>%
+  select(LTU, Label, n, subsample_n)
+
+subsample <- nested_table %>%
+  kable(
+    caption   = "CCZ Fish Subsampling",
+    col.names = c("LTU", "Label", "Total n", "Subsample n"),
+    align     = "llrr"
+  ) %>%
+  kable_styling(full_width = FALSE, bootstrap_options = c("striped", "hover"))
+
+if (knitr::is_html_output() || knitr::is_latex_output()) {
+  subsample <- subsample %>% collapse_rows(columns = 1, valign = "top")
+}
+
+outfile <- here::here("figs", "subsample_table.png")
+save_kable(subsample, file = outfile)
+
+subsample
+```
+
+
+Now we are ready to start dissecting and collecting actual data. 

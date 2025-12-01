@@ -77,6 +77,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="OCN682_Final_CCZ_files/libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
 <link href="OCN682_Final_CCZ_files/libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet">
 <script src="OCN682_Final_CCZ_files/libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
+<script src="OCN682_Final_CCZ_files/libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="OCN682_Final_CCZ_files/libs/lightable-0.0.1/lightable.css" rel="stylesheet">
 
 
 </head>
@@ -96,6 +98,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#plotting-abundance-per-species-per-depth" id="toc-plotting-abundance-per-species-per-depth" class="nav-link" data-scroll-target="#plotting-abundance-per-species-per-depth">Plotting abundance per species per depth</a></li>
   <li><a href="#kite-diagrams-of-targeted-species" id="toc-kite-diagrams-of-targeted-species" class="nav-link" data-scroll-target="#kite-diagrams-of-targeted-species">Kite Diagrams of Targeted Species</a></li>
+  <li><a href="#subsampling" id="toc-subsampling" class="nav-link" data-scroll-target="#subsampling">Subsampling</a></li>
   </ul>
 </nav>
 </div>
@@ -135,11 +138,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(plotly)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(purrr)</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(wesanderson)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(plotly)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(purrr)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(wesanderson)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(grid)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
@@ -173,29 +179,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>This gave my lab the opportunity to survey micronekton- small fish &amp; invertebrates between 2-20cm- and establish the baseline community composition of midwater micronekton in the CCZ.</p>
 <p>The <strong>full ccz_ltu data set</strong> includes the lowest taxonomic (LTU) recorded for all fish and invertebrates sampled from the Clarion Clipperton Zone (CCZ).</p>
 <p>Using this data, the question I would like to answer is:</p>
-<p><strong>How does the trophic ecology of micronekton provide evidence of connectivity between different depths in the water column?</strong></p>
-<ul>
-<li>Though my diet data is not quite ready to be processed, I can use the full ccz_micro data set to display the species I chose to subsample and why</li>
-</ul>
+<p><strong>the objective of this quarto document is use the ccz_ltu data to understand which species are best to subsample</strong> to answer my dissertation question, <strong>how does the trophic ecology of micronekton provide evidence of connectivity between different depths in the water column?</strong></p>
 <p>Sampling:</p>
 <ul>
 <li>Micronekton were collected via <strong>10m Multiple Opening and Closing Environmental Sensing System (MOCNESS)</strong></li>
 <li>Specimens were collected in the <strong>spring</strong> and <strong>fall</strong> of 2021</li>
 <li>Sampling locations were the <strong>Preservation Reference Zone (PRZ)</strong> and <strong>Collection Test Area (CTA)</strong> which exist at opposite corners of NORI-D</li>
 </ul>
-<p>Let’s take a look at the total species presence at each depth range (not divided by site or season)</p>
 </section>
 </section>
 <section id="plotting-abundance-per-species-per-depth" class="level1">
 <h1>Plotting abundance per species per depth</h1>
+<p>Let’s take a look at the total species presence at each depth range (not divided by site or season)</p>
 <div class="cell">
 <div class="cell-output-display">
-<div class="plotly html-widget html-fill-item" id="htmlwidget-b3a1443f4ae20934ebb2" style="width:100%;height:464px;"></div>
-<script type="application/json" data-for="htmlwidget-b3a1443f4ae20934ebb2">{"x":{"visdat":{"cd0a416ea816":["function () ","plotlyVisDat"]},"cur_data":"cd0a416ea816","attrs":{"cd0a416ea816":{"x":{},"y":{},"mode":"markers","hoverinfo":"text","text":{},"color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"yaxis":{"domain":[0,1],"automargin":true,"title":"Depth range (m)","autorange":"reversed","type":"category","categoryorder":"array","categoryarray":["0-70","70-450","450-700","700-1000","1000-1500"]},"xaxis":{"domain":[0,1],"automargin":true,"title":"Total n (log scale)","type":"log"},"legend":{"title":{"text":"Species"}},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[4,2],"y":["1000-1500","700-1000"],"mode":"markers","hoverinfo":["text","text"],"text":["Species: Anoplogaster cornuta <br>Family: Anoplogasteridae <br>n: 4","Species: Anoplogaster cornuta <br>Family: Anoplogasteridae <br>n: 2"],"type":"scatter","name":"Anoplogaster cornuta","marker":{"color":"rgba(102,194,165,1)","line":{"color":"rgba(102,194,165,1)"}},"textfont":{"color":"rgba(102,194,165,1)"},"error_y":{"color":"rgba(102,194,165,1)"},"error_x":{"color":"rgba(102,194,165,1)"},"line":{"color":"rgba(102,194,165,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[4,11,178,2],"y":["1000-1500","450-700","70-450","700-1000"],"mode":"markers","hoverinfo":["text","text","text","text"],"text":["Species: Argyropelecus lychnus <br>Family: Sternoptychidae <br>n: 4","Species: Argyropelecus lychnus <br>Family: Sternoptychidae <br>n: 11","Species: Argyropelecus lychnus <br>Family: Sternoptychidae <br>n: 178","Species: Argyropelecus lychnus <br>Family: Sternoptychidae <br>n: 2"],"type":"scatter","name":"Argyropelecus lychnus","marker":{"color":"rgba(130,189,157,1)","line":{"color":"rgba(130,189,157,1)"}},"textfont":{"color":"rgba(130,189,157,1)"},"error_y":{"color":"rgba(130,189,157,1)"},"error_x":{"color":"rgba(130,189,157,1)"},"line":{"color":"rgba(130,189,157,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[3,3,8],"y":["450-700","70-450","700-1000"],"mode":"markers","hoverinfo":["text","text","text"],"text":["Species: Bathophilus filifer <br>Family: Stomiidae <br>n: 3","Species: Bathophilus filifer <br>Family: Stomiidae <br>n: 3","Species: Bathophilus filifer <br>Family: Stomiidae <br>n: 8"],"type":"scatter","name":"Bathophilus filifer","marker":{"color":"rgba(151,185,150,1)","line":{"color":"rgba(151,185,150,1)"}},"textfont":{"color":"rgba(151,185,150,1)"},"error_y":{"color":"rgba(151,185,150,1)"},"error_x":{"color":"rgba(151,185,150,1)"},"line":{"color":"rgba(151,185,150,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[2],"y":["70-450"],"mode":"markers","hoverinfo":"text","text":"Species: Bathophilus kingi <br>Family: Stomiidae <br>n: 2","type":"scatter","name":"Bathophilus kingi","marker":{"color":"rgba(170,179,142,1)","line":{"color":"rgba(170,179,142,1)"}},"textfont":{"color":"rgba(170,179,142,1)"},"error_y":{"color":"rgba(170,179,142,1)"},"error_x":{"color":"rgba(170,179,142,1)"},"line":{"color":"rgba(170,179,142,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[2],"y":["1000-1500"],"mode":"markers","hoverinfo":"text","text":"Species: Bathylaco nigricans <br>Family: Alepocephalidae <br>n: 2","type":"scatter","name":"Bathylaco nigricans","marker":{"color":"rgba(187,174,134,1)","line":{"color":"rgba(187,174,134,1)"}},"textfont":{"color":"rgba(187,174,134,1)"},"error_y":{"color":"rgba(187,174,134,1)"},"error_x":{"color":"rgba(187,174,134,1)"},"line":{"color":"rgba(187,174,134,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1,2,12,32,143],"y":["0-70","1000-1500","450-700","70-450","700-1000"],"mode":"markers","hoverinfo":["text","text","text","text","text"],"text":["Species: Bathylagoides nigrigenys <br>Family: Bathylagidae <br>n: 1","Species: Bathylagoides nigrigenys <br>Family: Bathylagidae <br>n: 2","Species: Bathylagoides nigrigenys <br>Family: Bathylagidae <br>n: 12","Species: Bathylagoides nigrigenys <br>Family: Bathylagidae <br>n: 32","Species: Bathylagoides nigrigenys <br>Family: Bathylagidae <br>n: 143"],"type":"scatter","name":"Bathylagoides nigrigenys","marker":{"color":"rgba(202,168,127,1)","line":{"color":"rgba(202,168,127,1)"}},"textfont":{"color":"rgba(202,168,127,1)"},"error_y":{"color":"rgba(202,168,127,1)"},"error_x":{"color":"rgba(202,168,127,1)"},"line":{"color":"rgba(202,168,127,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1],"y":["1000-1500"],"mode":"markers","hoverinfo":"text","text":"Species: Bathypterois pectinatus <br>Family: Ipnopidae <br>n: 1","type":"scatter","name":"Bathypterois pectinatus","marker":{"color":"rgba(216,162,119,1)","line":{"color":"rgba(216,162,119,1)"}},"textfont":{"color":"rgba(216,162,119,1)"},"error_y":{"color":"rgba(216,162,119,1)"},"error_x":{"color":"rgba(216,162,119,1)"},"line":{"color":"rgba(216,162,119,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1],"y":["700-1000"],"mode":"markers","hoverinfo":"text","text":"Species: Borostomias panamensis <br>Family: Stomiidae <br>n: 1","type":"scatter","name":"Borostomias panamensis","marker":{"color":"rgba(229,155,112,1)","line":{"color":"rgba(229,155,112,1)"}},"textfont":{"color":"rgba(229,155,112,1)"},"error_y":{"color":"rgba(229,155,112,1)"},"error_x":{"color":"rgba(229,155,112,1)"},"line":{"color":"rgba(229,155,112,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1,1,1,1],"y":["1000-1500","700-1000","1000-1500","450-700"],"mode":"markers","hoverinfo":["text","text","text","text"],"text":["Species: Centrophryne spinulosa <br>Family: Centrophrynidae <br>n: 1","Species: Centrophryne spinulosa <br>Family: Centrophrynidae <br>n: 1","Species: Centrophryne spinulosa <br>Family: Oneirodidae <br>n: 1","Species: Centrophryne spinulosa <br>Family: Oneirodidae <br>n: 1"],"type":"scatter","name":"Centrophryne spinulosa","marker":{"color":"rgba(242,148,104,1)","line":{"color":"rgba(242,148,104,1)"}},"textfont":{"color":"rgba(242,148,104,1)"},"error_y":{"color":"rgba(242,148,104,1)"},"error_x":{"color":"rgba(242,148,104,1)"},"line":{"color":"rgba(242,148,104,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1],"y":["700-1000"],"mode":"markers","hoverinfo":"text","text":"Species: Chauliodus barbatus <br>Family: Stomiidae <br>n: 1","type":"scatter","name":"Chauliodus barbatus","marker":{"color":"rgba(251,141,100,1)","line":{"color":"rgba(251,141,100,1)"}},"textfont":{"color":"rgba(251,141,100,1)"},"error_y":{"color":"rgba(251,141,100,1)"},"error_x":{"color":"rgba(251,141,100,1)"},"line":{"color":"rgba(251,141,100,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[3,2,17],"y":["450-700","70-450","700-1000"],"mode":"markers","hoverinfo":["text","text","text"],"text":["Species: Chauliodus sloani <br>Family: Stomiidae <br>n: 3","Species: Chauliodus sloani <br>Family: Stomiidae <br>n: 2","Species: Chauliodus sloani <br>Family: Stomiidae <br>n: 17"],"type":"scatter","name":"Chauliodus sloani","marker":{"color":"rgba(242,144,112,1)","line":{"color":"rgba(242,144,112,1)"}},"textfont":{"color":"rgba(242,144,112,1)"},"error_y":{"color":"rgba(242,144,112,1)"},"error_x":{"color":"rgba(242,144,112,1)"},"line":{"color":"rgba(242,144,112,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1,3],"y":["450-700","700-1000"],"mode":"markers","hoverinfo":["text","text"],"text":["Species: Chiasmodon subniger <br>Family: Chiasmodontidae <br>n: 1","Species: Chiasmodon subniger <br>Family: Chiasmodontidae <br>n: 3"],"type":"scatter","name":"Chiasmodon subniger","marker":{"color":"rgba(232,146,124,1)","line":{"color":"rgba(232,146,124,1)"}},"textfont":{"color":"rgba(232,146,124,1)"},"error_y":{"color":"rgba(232,146,124,1)"},"error_x":{"color":"rgba(232,146,124,1)"},"line":{"color":"rgba(232,146,124,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[22,397,1667,469,11237],"y":["0-70","1000-1500","450-700","70-450","700-1000"],"mode":"markers","hoverinfo":["text","text","text","text","text"],"text":["Species: Cyclothone acclinidens <br>Family: Gonostomatidae <br>n: 22","Species: Cyclothone acclinidens <br>Family: Gonostomatidae <br>n: 397","Species: Cyclothone acclinidens <br>Family: Gonostomatidae <br>n: 1667","Species: Cyclothone acclinidens <br>Family: Gonostomatidae <br>n: 469","Species: Cyclothone acclinidens <br>Family: Gonostomatidae <br>n: 11237"],"type":"scatter","name":"Cyclothone acclinidens","marker":{"color":"rgba(221,149,136,1)","line":{"color":"rgba(221,149,136,1)"}},"textfont":{"color":"rgba(221,149,136,1)"},"error_y":{"color":"rgba(221,149,136,1)"},"error_x":{"color":"rgba(221,149,136,1)"},"line":{"color":"rgba(221,149,136,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[3,36,76],"y":["1000-1500","70-450","700-1000"],"mode":"markers","hoverinfo":["text","text","text"],"text":["Species: Cyclothone atraria <br>Family: Gonostomatidae <br>n: 3","Species: Cyclothone atraria <br>Family: Gonostomatidae <br>n: 36","Species: Cyclothone atraria <br>Family: Gonostomatidae <br>n: 76"],"type":"scatter","name":"Cyclothone atraria","marker":{"color":"rgba(210,151,148,1)","line":{"color":"rgba(210,151,148,1)"}},"textfont":{"color":"rgba(210,151,148,1)"},"error_y":{"color":"rgba(210,151,148,1)"},"error_x":{"color":"rgba(210,151,148,1)"},"line":{"color":"rgba(210,151,148,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[31],"y":["1000-1500"],"mode":"markers","hoverinfo":"text","text":"Species: Cyclothone obscura <br>Family: Gonostomatidae <br>n: 31","type":"scatter","name":"Cyclothone obscura","marker":{"color":"rgba(199,153,159,1)","line":{"color":"rgba(199,153,159,1)"}},"textfont":{"color":"rgba(199,153,159,1)"},"error_y":{"color":"rgba(199,153,159,1)"},"error_x":{"color":"rgba(199,153,159,1)"},"line":{"color":"rgba(199,153,159,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[14,42,17,1016],"y":["1000-1500","450-700","70-450","700-1000"],"mode":"markers","hoverinfo":["text","text","text","text"],"text":["Species: Cyclothone pallida <br>Family: Gonostomatidae <br>n: 14","Species: Cyclothone pallida <br>Family: Gonostomatidae <br>n: 42","Species: Cyclothone pallida <br>Family: Gonostomatidae <br>n: 17","Species: Cyclothone pallida <br>Family: Gonostomatidae <br>n: 1016"],"type":"scatter","name":"Cyclothone pallida","marker":{"color":"rgba(185,155,171,1)","line":{"color":"rgba(185,155,171,1)"}},"textfont":{"color":"rgba(185,155,171,1)"},"error_y":{"color":"rgba(185,155,171,1)"},"error_x":{"color":"rgba(185,155,171,1)"},"line":{"color":"rgba(185,155,171,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1,579],"y":["450-700","70-450"],"mode":"markers","hoverinfo":["text","text"],"text":["Species: Cyclothone signata <br>Family: Gonostomatidae <br>n: 1","Species: Cyclothone signata <br>Family: Gonostomatidae <br>n: 579"],"type":"scatter","name":"Cyclothone signata","marker":{"color":"rgba(171,157,183,1)","line":{"color":"rgba(171,157,183,1)"}},"textfont":{"color":"rgba(171,157,183,1)"},"error_y":{"color":"rgba(171,157,183,1)"},"error_x":{"color":"rgba(171,157,183,1)"},"line":{"color":"rgba(171,157,183,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[2,1],"y":["0-70","70-450"],"mode":"markers","hoverinfo":["text","text"],"text":["Species: Diaphus anderseni <br>Family: Myctophidae <br>n: 2","Species: Diaphus anderseni <br>Family: Myctophidae <br>n: 1"],"type":"scatter","name":"Diaphus anderseni","marker":{"color":"rgba(154,159,195,1)","line":{"color":"rgba(154,159,195,1)"}},"textfont":{"color":"rgba(154,159,195,1)"},"error_y":{"color":"rgba(154,159,195,1)"},"error_x":{"color":"rgba(154,159,195,1)"},"line":{"color":"rgba(154,159,195,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[40,40,113],"y":["0-70","450-700","70-450"],"mode":"markers","hoverinfo":["text","text","text"],"text":["Species: Diaphus pacificus <br>Family: Myctophidae <br>n: 40","Species: Diaphus pacificus <br>Family: Myctophidae <br>n: 40","Species: Diaphus pacificus <br>Family: Myctophidae <br>n: 113"],"type":"scatter","name":"Diaphus pacificus","marker":{"color":"rgba(145,159,203,1)","line":{"color":"rgba(145,159,203,1)"}},"textfont":{"color":"rgba(145,159,203,1)"},"error_y":{"color":"rgba(145,159,203,1)"},"error_x":{"color":"rgba(145,159,203,1)"},"line":{"color":"rgba(145,159,203,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[158,5,214,151,6],"y":["0-70","1000-1500","450-700","70-450","700-1000"],"mode":"markers","hoverinfo":["text","text","text","text","text"],"text":["Species: Diogenicthys laternatus <br>Family: Myctophidae <br>n: 158","Species: Diogenicthys laternatus <br>Family: Myctophidae <br>n: 5","Species: Diogenicthys laternatus <br>Family: Myctophidae <br>n: 214","Species: Diogenicthys laternatus <br>Family: Myctophidae <br>n: 151","Species: Diogenicthys laternatus <br>Family: Myctophidae <br>n: 6"],"type":"scatter","name":"Diogenicthys laternatus","marker":{"color":"rgba(156,158,202,1)","line":{"color":"rgba(156,158,202,1)"}},"textfont":{"color":"rgba(156,158,202,1)"},"error_y":{"color":"rgba(156,158,202,1)"},"error_x":{"color":"rgba(156,158,202,1)"},"line":{"color":"rgba(156,158,202,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1,2],"y":["0-70","70-450"],"mode":"markers","hoverinfo":["text","text"],"text":["Species: Diplophos taenia <br>Family: Gonostomatidae <br>n: 1","Species: Diplophos taenia <br>Family: Gonostomatidae <br>n: 2"],"type":"scatter","name":"Diplophos taenia","marker":{"color":"rgba(168,156,201,1)","line":{"color":"rgba(168,156,201,1)"}},"textfont":{"color":"rgba(168,156,201,1)"},"error_y":{"color":"rgba(168,156,201,1)"},"error_x":{"color":"rgba(168,156,201,1)"},"line":{"color":"rgba(168,156,201,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[3],"y":["1000-1500"],"mode":"markers","hoverinfo":"text","text":"Species: Dolicholagus longirostris <br>Family: Bathylagidae <br>n: 3","type":"scatter","name":"Dolicholagus longirostris","marker":{"color":"rgba(178,153,200,1)","line":{"color":"rgba(178,153,200,1)"}},"textfont":{"color":"rgba(178,153,200,1)"},"error_y":{"color":"rgba(178,153,200,1)"},"error_x":{"color":"rgba(178,153,200,1)"},"line":{"color":"rgba(178,153,200,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1],"y":["0-70"],"mode":"markers","hoverinfo":"text","text":"Species: Eumecichthys fiski <br>Family: Lophotidae <br>n: 1","type":"scatter","name":"Eumecichthys fiski","marker":{"color":"rgba(188,151,199,1)","line":{"color":"rgba(188,151,199,1)"}},"textfont":{"color":"rgba(188,151,199,1)"},"error_y":{"color":"rgba(188,151,199,1)"},"error_x":{"color":"rgba(188,151,199,1)"},"line":{"color":"rgba(188,151,199,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1],"y":["700-1000"],"mode":"markers","hoverinfo":"text","text":"Species: Gigantactis kreffti <br>Family: Gigantactinidae <br>n: 1","type":"scatter","name":"Gigantactis kreffti","marker":{"color":"rgba(198,149,198,1)","line":{"color":"rgba(198,149,198,1)"}},"textfont":{"color":"rgba(198,149,198,1)"},"error_y":{"color":"rgba(198,149,198,1)"},"error_x":{"color":"rgba(198,149,198,1)"},"line":{"color":"rgba(198,149,198,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[2],"y":["70-450"],"mode":"markers","hoverinfo":"text","text":"Species: Gonicthys tenuiculus <br>Family: Myctophidae <br>n: 2","type":"scatter","name":"Gonicthys tenuiculus","marker":{"color":"rgba(208,146,197,1)","line":{"color":"rgba(208,146,197,1)"}},"textfont":{"color":"rgba(208,146,197,1)"},"error_y":{"color":"rgba(208,146,197,1)"},"error_x":{"color":"rgba(208,146,197,1)"},"line":{"color":"rgba(208,146,197,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[4,3,1,1],"y":["0-70","450-700","70-450","700-1000"],"mode":"markers","hoverinfo":["text","text","text","text"],"text":["Species: Hygophum proximum <br>Family: Myctophidae <br>n: 4","Species: Hygophum proximum <br>Family: Myctophidae <br>n: 3","Species: Hygophum proximum <br>Family: Myctophidae <br>n: 1","Species: Hygophum proximum <br>Family: Myctophidae <br>n: 1"],"type":"scatter","name":"Hygophum proximum","marker":{"color":"rgba(217,143,196,1)","line":{"color":"rgba(217,143,196,1)"}},"textfont":{"color":"rgba(217,143,196,1)"},"error_y":{"color":"rgba(217,143,196,1)"},"error_x":{"color":"rgba(217,143,196,1)"},"line":{"color":"rgba(217,143,196,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[45,1,25,17,70],"y":["0-70","1000-1500","450-700","70-450","700-1000"],"mode":"markers","hoverinfo":["text","text","text","text","text"],"text":["Species: Idiacanthus antrostomus <br>Family: Stomiidae <br>n: 45","Species: Idiacanthus antrostomus <br>Family: Stomiidae <br>n: 1","Species: Idiacanthus antrostomus <br>Family: Stomiidae <br>n: 25","Species: Idiacanthus antrostomus <br>Family: Stomiidae <br>n: 17","Species: Idiacanthus antrostomus <br>Family: Stomiidae <br>n: 70"],"type":"scatter","name":"Idiacanthus antrostomus","marker":{"color":"rgba(226,140,196,1)","line":{"color":"rgba(226,140,196,1)"}},"textfont":{"color":"rgba(226,140,196,1)"},"error_y":{"color":"rgba(226,140,196,1)"},"error_x":{"color":"rgba(226,140,196,1)"},"line":{"color":"rgba(226,140,196,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[4,5,14,13,27],"y":["450-700","0-70","450-700","70-450","700-1000"],"mode":"markers","hoverinfo":["text","text","text","text","text"],"text":["Species: Idiacanthus fasciola <br>Family:  <br>n: 4","Species: Idiacanthus fasciola <br>Family: Stomiidae <br>n: 5","Species: Idiacanthus fasciola <br>Family: Stomiidae <br>n: 14","Species: Idiacanthus fasciola <br>Family: Stomiidae <br>n: 13","Species: Idiacanthus fasciola <br>Family: Stomiidae <br>n: 27"],"type":"scatter","name":"Idiacanthus fasciola","marker":{"color":"rgba(229,143,190,1)","line":{"color":"rgba(229,143,190,1)"}},"textfont":{"color":"rgba(229,143,190,1)"},"error_y":{"color":"rgba(229,143,190,1)"},"error_x":{"color":"rgba(229,143,190,1)"},"line":{"color":"rgba(229,143,190,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1,1,6],"y":["1000-1500","70-450","700-1000"],"mode":"markers","hoverinfo":["text","text","text"],"text":["Species: Kali kerberti <br>Family: Chiasmodontidae <br>n: 1","Species: Kali kerberti <br>Family: Chiasmodontidae <br>n: 1","Species: Kali kerberti <br>Family: Chiasmodontidae <br>n: 6"],"type":"scatter","name":"Kali kerberti","marker":{"color":"rgba(224,153,179,1)","line":{"color":"rgba(224,153,179,1)"}},"textfont":{"color":"rgba(224,153,179,1)"},"error_y":{"color":"rgba(224,153,179,1)"},"error_x":{"color":"rgba(224,153,179,1)"},"line":{"color":"rgba(224,153,179,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[3],"y":["1000-1500"],"mode":"markers","hoverinfo":"text","text":"Species: Kali macrodon <br>Family: Chiasmodontidae <br>n: 3","type":"scatter","name":"Kali macrodon","marker":{"color":"rgba(218,163,167,1)","line":{"color":"rgba(218,163,167,1)"}},"textfont":{"color":"rgba(218,163,167,1)"},"error_y":{"color":"rgba(218,163,167,1)"},"error_x":{"color":"rgba(218,163,167,1)"},"line":{"color":"rgba(218,163,167,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[2,32,15,9],"y":["1000-1500","450-700","70-450","700-1000"],"mode":"markers","hoverinfo":["text","text","text","text"],"text":["Species: Lampanyctus bristori <br>Family: Myctophidae <br>n: 2","Species: Lampanyctus bristori <br>Family: Myctophidae <br>n: 32","Species: Lampanyctus bristori <br>Family: Myctophidae <br>n: 15","Species: Lampanyctus bristori <br>Family: Myctophidae <br>n: 9"],"type":"scatter","name":"Lampanyctus bristori","marker":{"color":"rgba(212,172,156,1)","line":{"color":"rgba(212,172,156,1)"}},"textfont":{"color":"rgba(212,172,156,1)"},"error_y":{"color":"rgba(212,172,156,1)"},"error_x":{"color":"rgba(212,172,156,1)"},"line":{"color":"rgba(212,172,156,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[11,16,18,6],"y":["0-70","1000-1500","450-700","700-1000"],"mode":"markers","hoverinfo":["text","text","text","text"],"text":["Species: Lampanyctus omostigma <br>Family: Myctophidae <br>n: 11","Species: Lampanyctus omostigma <br>Family: Myctophidae <br>n: 16","Species: Lampanyctus omostigma <br>Family: Myctophidae <br>n: 18","Species: Lampanyctus omostigma <br>Family: Myctophidae <br>n: 6"],"type":"scatter","name":"Lampanyctus omostigma","marker":{"color":"rgba(205,180,144,1)","line":{"color":"rgba(205,180,144,1)"}},"textfont":{"color":"rgba(205,180,144,1)"},"error_y":{"color":"rgba(205,180,144,1)"},"error_x":{"color":"rgba(205,180,144,1)"},"line":{"color":"rgba(205,180,144,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[24,101,19,2,30],"y":["0-70","1000-1500","450-700","70-450","700-1000"],"mode":"markers","hoverinfo":["text","text","text","text","text"],"text":["Species: Lampanyctus parvicauda <br>Family: Myctophidae <br>n: 24","Species: Lampanyctus parvicauda <br>Family: Myctophidae <br>n: 101","Species: Lampanyctus parvicauda <br>Family: Myctophidae <br>n: 19","Species: Lampanyctus parvicauda <br>Family: Myctophidae <br>n: 2","Species: Lampanyctus parvicauda <br>Family: Myctophidae <br>n: 30"],"type":"scatter","name":"Lampanyctus parvicauda","marker":{"color":"rgba(198,189,132,1)","line":{"color":"rgba(198,189,132,1)"}},"textfont":{"color":"rgba(198,189,132,1)"},"error_y":{"color":"rgba(198,189,132,1)"},"error_x":{"color":"rgba(198,189,132,1)"},"line":{"color":"rgba(198,189,132,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1,1],"y":["1000-1500","700-1000"],"mode":"markers","hoverinfo":["text","text"],"text":["Species: Lophodolus acanthognathus <br>Family: Oneirodidae <br>n: 1","Species: Lophodolus acanthognathus <br>Family: Oneirodidae <br>n: 1"],"type":"scatter","name":"Lophodolus acanthognathus","marker":{"color":"rgba(190,197,119,1)","line":{"color":"rgba(190,197,119,1)"}},"textfont":{"color":"rgba(190,197,119,1)"},"error_y":{"color":"rgba(190,197,119,1)"},"error_x":{"color":"rgba(190,197,119,1)"},"line":{"color":"rgba(190,197,119,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1,1],"y":["1000-1500","700-1000"],"mode":"markers","hoverinfo":["text","text"],"text":["Species: Malacosteus niger <br>Family: Stomiidae <br>n: 1","Species: Malacosteus niger <br>Family: Stomiidae <br>n: 1"],"type":"scatter","name":"Malacosteus niger","marker":{"color":"rgba(181,205,105,1)","line":{"color":"rgba(181,205,105,1)"}},"textfont":{"color":"rgba(181,205,105,1)"},"error_y":{"color":"rgba(181,205,105,1)"},"error_x":{"color":"rgba(181,205,105,1)"},"line":{"color":"rgba(181,205,105,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[3,1],"y":["450-700","700-1000"],"mode":"markers","hoverinfo":["text","text"],"text":["Species: Melamphaes acanthomus <br>Family: Melamphaidae <br>n: 3","Species: Melamphaes acanthomus <br>Family: Melamphaidae <br>n: 1"],"type":"scatter","name":"Melamphaes acanthomus","marker":{"color":"rgba(171,213,91,1)","line":{"color":"rgba(171,213,91,1)"}},"textfont":{"color":"rgba(171,213,91,1)"},"error_y":{"color":"rgba(171,213,91,1)"},"error_x":{"color":"rgba(171,213,91,1)"},"line":{"color":"rgba(171,213,91,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[2,1,1],"y":["1000-1500","450-700","700-1000"],"mode":"markers","hoverinfo":["text","text","text"],"text":["Species: Melamphaes laeviceps <br>Family: Melamphaidae <br>n: 2","Species: Melamphaes laeviceps <br>Family: Melamphaidae <br>n: 1","Species: Melamphaes laeviceps <br>Family: Melamphaidae <br>n: 1"],"type":"scatter","name":"Melamphaes laeviceps","marker":{"color":"rgba(172,216,82,1)","line":{"color":"rgba(172,216,82,1)"}},"textfont":{"color":"rgba(172,216,82,1)"},"error_y":{"color":"rgba(172,216,82,1)"},"error_x":{"color":"rgba(172,216,82,1)"},"line":{"color":"rgba(172,216,82,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[4,13,4],"y":["1000-1500","450-700","700-1000"],"mode":"markers","hoverinfo":["text","text","text"],"text":["Species: Melamphaes macrocephalus <br>Family: Melamphaidae <br>n: 4","Species: Melamphaes macrocephalus <br>Family: Melamphaidae <br>n: 13","Species: Melamphaes macrocephalus <br>Family: Melamphaidae <br>n: 4"],"type":"scatter","name":"Melamphaes macrocephalus","marker":{"color":"rgba(183,217,79,1)","line":{"color":"rgba(183,217,79,1)"}},"textfont":{"color":"rgba(183,217,79,1)"},"error_y":{"color":"rgba(183,217,79,1)"},"error_x":{"color":"rgba(183,217,79,1)"},"line":{"color":"rgba(183,217,79,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[14,13,3,11],"y":["1000-1500","450-700","70-450","700-1000"],"mode":"markers","hoverinfo":["text","text","text","text"],"text":["Species: Melamphaes spinifer <br>Family: Melamphaidae <br>n: 14","Species: Melamphaes spinifer <br>Family: Melamphaidae <br>n: 13","Species: Melamphaes spinifer <br>Family: Melamphaidae <br>n: 3","Species: Melamphaes spinifer <br>Family: Melamphaidae <br>n: 11"],"type":"scatter","name":"Melamphaes spinifer","marker":{"color":"rgba(194,217,75,1)","line":{"color":"rgba(194,217,75,1)"}},"textfont":{"color":"rgba(194,217,75,1)"},"error_y":{"color":"rgba(194,217,75,1)"},"error_x":{"color":"rgba(194,217,75,1)"},"line":{"color":"rgba(194,217,75,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[3],"y":["700-1000"],"mode":"markers","hoverinfo":"text","text":"Species: Melanocetus johnsonii <br>Family: Melanocetidae <br>n: 3","type":"scatter","name":"Melanocetus johnsonii","marker":{"color":"rgba(204,217,71,1)","line":{"color":"rgba(204,217,71,1)"}},"textfont":{"color":"rgba(204,217,71,1)"},"error_y":{"color":"rgba(204,217,71,1)"},"error_x":{"color":"rgba(204,217,71,1)"},"line":{"color":"rgba(204,217,71,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[2],"y":["1000-1500"],"mode":"markers","hoverinfo":"text","text":"Species: Melanocetus niger <br>Family: Melanocetidae <br>n: 2","type":"scatter","name":"Melanocetus niger","marker":{"color":"rgba(214,217,67,1)","line":{"color":"rgba(214,217,67,1)"}},"textfont":{"color":"rgba(214,217,67,1)"},"error_y":{"color":"rgba(214,217,67,1)"},"error_x":{"color":"rgba(214,217,67,1)"},"line":{"color":"rgba(214,217,67,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1],"y":["700-1000"],"mode":"markers","hoverinfo":"text","text":"Species: Mentodus facilis <br>Family: Platytroctidae <br>n: 1","type":"scatter","name":"Mentodus facilis","marker":{"color":"rgba(224,217,63,1)","line":{"color":"rgba(224,217,63,1)"}},"textfont":{"color":"rgba(224,217,63,1)"},"error_y":{"color":"rgba(224,217,63,1)"},"error_x":{"color":"rgba(224,217,63,1)"},"line":{"color":"rgba(224,217,63,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1],"y":["1000-1500"],"mode":"markers","hoverinfo":"text","text":"Species: Myctophum aurolaternatum <br>Family: Myctophidae <br>n: 1","type":"scatter","name":"Myctophum aurolaternatum","marker":{"color":"rgba(234,217,59,1)","line":{"color":"rgba(234,217,59,1)"}},"textfont":{"color":"rgba(234,217,59,1)"},"error_y":{"color":"rgba(234,217,59,1)"},"error_x":{"color":"rgba(234,217,59,1)"},"line":{"color":"rgba(234,217,59,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1,2,2],"y":["0-70","70-450","700-1000"],"mode":"markers","hoverinfo":["text","text","text"],"text":["Species: Myctophum nitidulum <br>Family: Myctophidae <br>n: 1","Species: Myctophum nitidulum <br>Family: Myctophidae <br>n: 2","Species: Myctophum nitidulum <br>Family: Myctophidae <br>n: 2"],"type":"scatter","name":"Myctophum nitidulum","marker":{"color":"rgba(243,217,54,1)","line":{"color":"rgba(243,217,54,1)"}},"textfont":{"color":"rgba(243,217,54,1)"},"error_y":{"color":"rgba(243,217,54,1)"},"error_x":{"color":"rgba(243,217,54,1)"},"line":{"color":"rgba(243,217,54,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1],"y":["700-1000"],"mode":"markers","hoverinfo":"text","text":"Species: Nemichthys scolopaceus <br>Family: Nemichthyidae <br>n: 1","type":"scatter","name":"Nemichthys scolopaceus","marker":{"color":"rgba(252,217,49,1)","line":{"color":"rgba(252,217,49,1)"}},"textfont":{"color":"rgba(252,217,49,1)"},"error_y":{"color":"rgba(252,217,49,1)"},"error_x":{"color":"rgba(252,217,49,1)"},"line":{"color":"rgba(252,217,49,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[3],"y":["0-70"],"mode":"markers","hoverinfo":"text","text":"Species: Nesiarchus nasutus <br>Family: Gempylidae <br>n: 3","type":"scatter","name":"Nesiarchus nasutus","marker":{"color":"rgba(253,215,59,1)","line":{"color":"rgba(253,215,59,1)"}},"textfont":{"color":"rgba(253,215,59,1)"},"error_y":{"color":"rgba(253,215,59,1)"},"error_x":{"color":"rgba(253,215,59,1)"},"line":{"color":"rgba(253,215,59,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[3,10],"y":["1000-1500","700-1000"],"mode":"markers","hoverinfo":["text","text"],"text":["Species: Nezumia parini <br>Family: Macrouridae <br>n: 3","Species: Nezumia parini <br>Family: Macrouridae <br>n: 10"],"type":"scatter","name":"Nezumia parini","marker":{"color":"rgba(251,213,74,1)","line":{"color":"rgba(251,213,74,1)"}},"textfont":{"color":"rgba(251,213,74,1)"},"error_y":{"color":"rgba(251,213,74,1)"},"error_x":{"color":"rgba(251,213,74,1)"},"line":{"color":"rgba(251,213,74,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[2],"y":["700-1000"],"mode":"markers","hoverinfo":"text","text":"Species: Oneirodes luetkenii <br>Family: Oneirodidae <br>n: 2","type":"scatter","name":"Oneirodes luetkenii","marker":{"color":"rgba(248,210,86,1)","line":{"color":"rgba(248,210,86,1)"}},"textfont":{"color":"rgba(248,210,86,1)"},"error_y":{"color":"rgba(248,210,86,1)"},"error_x":{"color":"rgba(248,210,86,1)"},"line":{"color":"rgba(248,210,86,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1],"y":["1000-1500"],"mode":"markers","hoverinfo":"text","text":"Species: Paracaristius nudarcus <br>Family: Caristiidae <br>n: 1","type":"scatter","name":"Paracaristius nudarcus","marker":{"color":"rgba(246,208,98,1)","line":{"color":"rgba(246,208,98,1)"}},"textfont":{"color":"rgba(246,208,98,1)"},"error_y":{"color":"rgba(246,208,98,1)"},"error_x":{"color":"rgba(246,208,98,1)"},"line":{"color":"rgba(246,208,98,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[4],"y":["1000-1500"],"mode":"markers","hoverinfo":"text","text":"Species: Poromitra nigrofulva <br>Family: Melamphaidae <br>n: 4","type":"scatter","name":"Poromitra nigrofulva","marker":{"color":"rgba(243,206,108,1)","line":{"color":"rgba(243,206,108,1)"}},"textfont":{"color":"rgba(243,206,108,1)"},"error_y":{"color":"rgba(243,206,108,1)"},"error_x":{"color":"rgba(243,206,108,1)"},"line":{"color":"rgba(243,206,108,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[18],"y":["1000-1500"],"mode":"markers","hoverinfo":"text","text":"Species: Poromitra oscitans <br>Family: Melamphaidae <br>n: 18","type":"scatter","name":"Poromitra oscitans","marker":{"color":"rgba(240,203,118,1)","line":{"color":"rgba(240,203,118,1)"}},"textfont":{"color":"rgba(240,203,118,1)"},"error_y":{"color":"rgba(240,203,118,1)"},"error_x":{"color":"rgba(240,203,118,1)"},"line":{"color":"rgba(240,203,118,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1],"y":["70-450"],"mode":"markers","hoverinfo":"text","text":"Species: Rosenblaticthys volveris <br>Family: Scopelarchidae <br>n: 1","type":"scatter","name":"Rosenblaticthys volveris","marker":{"color":"rgba(237,201,128,1)","line":{"color":"rgba(237,201,128,1)"}},"textfont":{"color":"rgba(237,201,128,1)"},"error_y":{"color":"rgba(237,201,128,1)"},"error_x":{"color":"rgba(237,201,128,1)"},"line":{"color":"rgba(237,201,128,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[2,9,1],"y":["450-700","70-450","700-1000"],"mode":"markers","hoverinfo":["text","text","text"],"text":["Species: Scopelarchoides nicholsi <br>Family: Scopelarchidae <br>n: 2","Species: Scopelarchoides nicholsi <br>Family: Scopelarchidae <br>n: 9","Species: Scopelarchoides nicholsi <br>Family: Scopelarchidae <br>n: 1"],"type":"scatter","name":"Scopelarchoides nicholsi","marker":{"color":"rgba(233,199,137,1)","line":{"color":"rgba(233,199,137,1)"}},"textfont":{"color":"rgba(233,199,137,1)"},"error_y":{"color":"rgba(233,199,137,1)"},"error_x":{"color":"rgba(233,199,137,1)"},"line":{"color":"rgba(233,199,137,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1,22,57],"y":["0-70","450-700","700-1000"],"mode":"markers","hoverinfo":["text","text","text"],"text":["Species: Scopelengys tristis <br>Family: Neoscopelidae <br>n: 1","Species: Scopelengys tristis <br>Family: Neoscopelidae <br>n: 22","Species: Scopelengys tristis <br>Family: Neoscopelidae <br>n: 57"],"type":"scatter","name":"Scopelengys tristis","marker":{"color":"rgba(230,196,147,1)","line":{"color":"rgba(230,196,147,1)"}},"textfont":{"color":"rgba(230,196,147,1)"},"error_y":{"color":"rgba(230,196,147,1)"},"error_x":{"color":"rgba(230,196,147,1)"},"line":{"color":"rgba(230,196,147,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[78,131],"y":["1000-1500","700-1000"],"mode":"markers","hoverinfo":["text","text"],"text":["Species: Scopeloberyx malayanus <br>Family: Melamphaidae <br>n: 78","Species: Scopeloberyx malayanus <br>Family: Melamphaidae <br>n: 131"],"type":"scatter","name":"Scopeloberyx malayanus","marker":{"color":"rgba(225,194,151,1)","line":{"color":"rgba(225,194,151,1)"}},"textfont":{"color":"rgba(225,194,151,1)"},"error_y":{"color":"rgba(225,194,151,1)"},"error_x":{"color":"rgba(225,194,151,1)"},"line":{"color":"rgba(225,194,151,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[2],"y":["700-1000"],"mode":"markers","hoverinfo":"text","text":"Species: Scopeloberyx pequenoi <br>Family: Melamphaidae <br>n: 2","type":"scatter","name":"Scopeloberyx pequenoi","marker":{"color":"rgba(219,192,155,1)","line":{"color":"rgba(219,192,155,1)"}},"textfont":{"color":"rgba(219,192,155,1)"},"error_y":{"color":"rgba(219,192,155,1)"},"error_x":{"color":"rgba(219,192,155,1)"},"line":{"color":"rgba(219,192,155,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[5,1],"y":["1000-1500","700-1000"],"mode":"markers","hoverinfo":["text","text"],"text":["Species: Scopeloberyx robustus <br>Family: Melamphaidae <br>n: 5","Species: Scopeloberyx robustus <br>Family: Melamphaidae <br>n: 1"],"type":"scatter","name":"Scopeloberyx robustus","marker":{"color":"rgba(214,190,158,1)","line":{"color":"rgba(214,190,158,1)"}},"textfont":{"color":"rgba(214,190,158,1)"},"error_y":{"color":"rgba(214,190,158,1)"},"error_x":{"color":"rgba(214,190,158,1)"},"line":{"color":"rgba(214,190,158,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[6,9,148,103,430],"y":["0-70","1000-1500","450-700","70-450","700-1000"],"mode":"markers","hoverinfo":["text","text","text","text","text"],"text":["Species: Scopelogadus bispinosus <br>Family: Melamphaidae <br>n: 6","Species: Scopelogadus bispinosus <br>Family: Melamphaidae <br>n: 9","Species: Scopelogadus bispinosus <br>Family: Melamphaidae <br>n: 148","Species: Scopelogadus bispinosus <br>Family: Melamphaidae <br>n: 103","Species: Scopelogadus bispinosus <br>Family: Melamphaidae <br>n: 430"],"type":"scatter","name":"Scopelogadus bispinosus","marker":{"color":"rgba(208,189,162,1)","line":{"color":"rgba(208,189,162,1)"}},"textfont":{"color":"rgba(208,189,162,1)"},"error_y":{"color":"rgba(208,189,162,1)"},"error_x":{"color":"rgba(208,189,162,1)"},"line":{"color":"rgba(208,189,162,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[2,3,26],"y":["1000-1500","450-700","700-1000"],"mode":"markers","hoverinfo":["text","text","text"],"text":["Species: Sternoptyx pseudobscura <br>Family: Sternoptychidae <br>n: 2","Species: Sternoptyx pseudobscura <br>Family: Sternoptychidae <br>n: 3","Species: Sternoptyx pseudobscura <br>Family: Sternoptychidae <br>n: 26"],"type":"scatter","name":"Sternoptyx pseudobscura","marker":{"color":"rgba(203,187,165,1)","line":{"color":"rgba(203,187,165,1)"}},"textfont":{"color":"rgba(203,187,165,1)"},"error_y":{"color":"rgba(203,187,165,1)"},"error_x":{"color":"rgba(203,187,165,1)"},"line":{"color":"rgba(203,187,165,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[2],"y":["70-450"],"mode":"markers","hoverinfo":"text","text":"Species: Stomias atriventer <br>Family: Stomiidae <br>n: 2","type":"scatter","name":"Stomias atriventer","marker":{"color":"rgba(197,185,169,1)","line":{"color":"rgba(197,185,169,1)"}},"textfont":{"color":"rgba(197,185,169,1)"},"error_y":{"color":"rgba(197,185,169,1)"},"error_x":{"color":"rgba(197,185,169,1)"},"line":{"color":"rgba(197,185,169,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[2,3,2],"y":["0-70","450-700","700-1000"],"mode":"markers","hoverinfo":["text","text","text"],"text":["Species: Symbolophorous reversus <br>Family: Myctophidae <br>n: 2","Species: Symbolophorous reversus <br>Family: Myctophidae <br>n: 3","Species: Symbolophorous reversus <br>Family: Myctophidae <br>n: 2"],"type":"scatter","name":"Symbolophorous reversus","marker":{"color":"rgba(191,183,172,1)","line":{"color":"rgba(191,183,172,1)"}},"textfont":{"color":"rgba(191,183,172,1)"},"error_y":{"color":"rgba(191,183,172,1)"},"error_x":{"color":"rgba(191,183,172,1)"},"line":{"color":"rgba(191,183,172,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1],"y":["450-700"],"mode":"markers","hoverinfo":"text","text":"Species: Talismania bifurcata <br>Family: Alepocephalidae <br>n: 1","type":"scatter","name":"Talismania bifurcata","marker":{"color":"rgba(185,181,176,1)","line":{"color":"rgba(185,181,176,1)"}},"textfont":{"color":"rgba(185,181,176,1)"},"error_y":{"color":"rgba(185,181,176,1)"},"error_x":{"color":"rgba(185,181,176,1)"},"line":{"color":"rgba(185,181,176,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[120,1,10,410,4],"y":["0-70","1000-1500","450-700","70-450","700-1000"],"mode":"markers","hoverinfo":["text","text","text","text","text"],"text":["Species: Vinciguerria lucetia <br>Family: Phosichthyidae <br>n: 120","Species: Vinciguerria lucetia <br>Family: Phosichthyidae <br>n: 1","Species: Vinciguerria lucetia <br>Family: Phosichthyidae <br>n: 10","Species: Vinciguerria lucetia <br>Family: Phosichthyidae <br>n: 410","Species: Vinciguerria lucetia <br>Family: Phosichthyidae <br>n: 4"],"type":"scatter","name":"Vinciguerria lucetia","marker":{"color":"rgba(179,179,179,1)","line":{"color":"rgba(179,179,179,1)"}},"textfont":{"color":"rgba(179,179,179,1)"},"error_y":{"color":"rgba(179,179,179,1)"},"error_x":{"color":"rgba(179,179,179,1)"},"line":{"color":"rgba(179,179,179,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-cd490e4f58cfc9062d81" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-cd490e4f58cfc9062d81">{"x":{"visdat":{"14aac69e7436b":["function () ","plotlyVisDat"]},"cur_data":"14aac69e7436b","attrs":{"14aac69e7436b":{"x":{},"y":{},"mode":"markers","hoverinfo":"text","text":{},"color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"yaxis":{"domain":[0,1],"automargin":true,"title":"Depth range (m)","autorange":"reversed","type":"category","categoryorder":"array","categoryarray":["0-70","70-450","450-700","700-1000","1000-1500"]},"xaxis":{"domain":[0,1],"automargin":true,"title":"Total n (log scale)","type":"log"},"legend":{"title":{"text":"Species"}},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[4,2],"y":["1000-1500","700-1000"],"mode":"markers","hoverinfo":["text","text"],"text":["Species: Anoplogaster cornuta <br>Family: Anoplogasteridae <br>n: 4","Species: Anoplogaster cornuta <br>Family: Anoplogasteridae <br>n: 2"],"type":"scatter","name":"Anoplogaster cornuta","marker":{"color":"rgba(102,194,165,1)","line":{"color":"rgba(102,194,165,1)"}},"textfont":{"color":"rgba(102,194,165,1)"},"error_y":{"color":"rgba(102,194,165,1)"},"error_x":{"color":"rgba(102,194,165,1)"},"line":{"color":"rgba(102,194,165,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[4,11,178,2],"y":["1000-1500","450-700","70-450","700-1000"],"mode":"markers","hoverinfo":["text","text","text","text"],"text":["Species: Argyropelecus lychnus <br>Family: Sternoptychidae <br>n: 4","Species: Argyropelecus lychnus <br>Family: Sternoptychidae <br>n: 11","Species: Argyropelecus lychnus <br>Family: Sternoptychidae <br>n: 178","Species: Argyropelecus lychnus <br>Family: Sternoptychidae <br>n: 2"],"type":"scatter","name":"Argyropelecus lychnus","marker":{"color":"rgba(130,189,157,1)","line":{"color":"rgba(130,189,157,1)"}},"textfont":{"color":"rgba(130,189,157,1)"},"error_y":{"color":"rgba(130,189,157,1)"},"error_x":{"color":"rgba(130,189,157,1)"},"line":{"color":"rgba(130,189,157,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[3,3,8],"y":["450-700","70-450","700-1000"],"mode":"markers","hoverinfo":["text","text","text"],"text":["Species: Bathophilus filifer <br>Family: Stomiidae <br>n: 3","Species: Bathophilus filifer <br>Family: Stomiidae <br>n: 3","Species: Bathophilus filifer <br>Family: Stomiidae <br>n: 8"],"type":"scatter","name":"Bathophilus filifer","marker":{"color":"rgba(151,185,150,1)","line":{"color":"rgba(151,185,150,1)"}},"textfont":{"color":"rgba(151,185,150,1)"},"error_y":{"color":"rgba(151,185,150,1)"},"error_x":{"color":"rgba(151,185,150,1)"},"line":{"color":"rgba(151,185,150,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[2],"y":["70-450"],"mode":"markers","hoverinfo":"text","text":"Species: Bathophilus kingi <br>Family: Stomiidae <br>n: 2","type":"scatter","name":"Bathophilus kingi","marker":{"color":"rgba(170,179,142,1)","line":{"color":"rgba(170,179,142,1)"}},"textfont":{"color":"rgba(170,179,142,1)"},"error_y":{"color":"rgba(170,179,142,1)"},"error_x":{"color":"rgba(170,179,142,1)"},"line":{"color":"rgba(170,179,142,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[2],"y":["1000-1500"],"mode":"markers","hoverinfo":"text","text":"Species: Bathylaco nigricans <br>Family: Alepocephalidae <br>n: 2","type":"scatter","name":"Bathylaco nigricans","marker":{"color":"rgba(187,174,134,1)","line":{"color":"rgba(187,174,134,1)"}},"textfont":{"color":"rgba(187,174,134,1)"},"error_y":{"color":"rgba(187,174,134,1)"},"error_x":{"color":"rgba(187,174,134,1)"},"line":{"color":"rgba(187,174,134,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1,2,12,32,143],"y":["0-70","1000-1500","450-700","70-450","700-1000"],"mode":"markers","hoverinfo":["text","text","text","text","text"],"text":["Species: Bathylagoides nigrigenys <br>Family: Bathylagidae <br>n: 1","Species: Bathylagoides nigrigenys <br>Family: Bathylagidae <br>n: 2","Species: Bathylagoides nigrigenys <br>Family: Bathylagidae <br>n: 12","Species: Bathylagoides nigrigenys <br>Family: Bathylagidae <br>n: 32","Species: Bathylagoides nigrigenys <br>Family: Bathylagidae <br>n: 143"],"type":"scatter","name":"Bathylagoides nigrigenys","marker":{"color":"rgba(202,168,127,1)","line":{"color":"rgba(202,168,127,1)"}},"textfont":{"color":"rgba(202,168,127,1)"},"error_y":{"color":"rgba(202,168,127,1)"},"error_x":{"color":"rgba(202,168,127,1)"},"line":{"color":"rgba(202,168,127,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1],"y":["1000-1500"],"mode":"markers","hoverinfo":"text","text":"Species: Bathypterois pectinatus <br>Family: Ipnopidae <br>n: 1","type":"scatter","name":"Bathypterois pectinatus","marker":{"color":"rgba(216,162,119,1)","line":{"color":"rgba(216,162,119,1)"}},"textfont":{"color":"rgba(216,162,119,1)"},"error_y":{"color":"rgba(216,162,119,1)"},"error_x":{"color":"rgba(216,162,119,1)"},"line":{"color":"rgba(216,162,119,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1],"y":["700-1000"],"mode":"markers","hoverinfo":"text","text":"Species: Borostomias panamensis <br>Family: Stomiidae <br>n: 1","type":"scatter","name":"Borostomias panamensis","marker":{"color":"rgba(229,155,112,1)","line":{"color":"rgba(229,155,112,1)"}},"textfont":{"color":"rgba(229,155,112,1)"},"error_y":{"color":"rgba(229,155,112,1)"},"error_x":{"color":"rgba(229,155,112,1)"},"line":{"color":"rgba(229,155,112,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1,1,1,1],"y":["1000-1500","700-1000","1000-1500","450-700"],"mode":"markers","hoverinfo":["text","text","text","text"],"text":["Species: Centrophryne spinulosa <br>Family: Centrophrynidae <br>n: 1","Species: Centrophryne spinulosa <br>Family: Centrophrynidae <br>n: 1","Species: Centrophryne spinulosa <br>Family: Oneirodidae <br>n: 1","Species: Centrophryne spinulosa <br>Family: Oneirodidae <br>n: 1"],"type":"scatter","name":"Centrophryne spinulosa","marker":{"color":"rgba(242,148,104,1)","line":{"color":"rgba(242,148,104,1)"}},"textfont":{"color":"rgba(242,148,104,1)"},"error_y":{"color":"rgba(242,148,104,1)"},"error_x":{"color":"rgba(242,148,104,1)"},"line":{"color":"rgba(242,148,104,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1],"y":["700-1000"],"mode":"markers","hoverinfo":"text","text":"Species: Chauliodus barbatus <br>Family: Stomiidae <br>n: 1","type":"scatter","name":"Chauliodus barbatus","marker":{"color":"rgba(251,141,100,1)","line":{"color":"rgba(251,141,100,1)"}},"textfont":{"color":"rgba(251,141,100,1)"},"error_y":{"color":"rgba(251,141,100,1)"},"error_x":{"color":"rgba(251,141,100,1)"},"line":{"color":"rgba(251,141,100,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[3,2,17],"y":["450-700","70-450","700-1000"],"mode":"markers","hoverinfo":["text","text","text"],"text":["Species: Chauliodus sloani <br>Family: Stomiidae <br>n: 3","Species: Chauliodus sloani <br>Family: Stomiidae <br>n: 2","Species: Chauliodus sloani <br>Family: Stomiidae <br>n: 17"],"type":"scatter","name":"Chauliodus sloani","marker":{"color":"rgba(242,144,112,1)","line":{"color":"rgba(242,144,112,1)"}},"textfont":{"color":"rgba(242,144,112,1)"},"error_y":{"color":"rgba(242,144,112,1)"},"error_x":{"color":"rgba(242,144,112,1)"},"line":{"color":"rgba(242,144,112,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1,3],"y":["450-700","700-1000"],"mode":"markers","hoverinfo":["text","text"],"text":["Species: Chiasmodon subniger <br>Family: Chiasmodontidae <br>n: 1","Species: Chiasmodon subniger <br>Family: Chiasmodontidae <br>n: 3"],"type":"scatter","name":"Chiasmodon subniger","marker":{"color":"rgba(232,146,124,1)","line":{"color":"rgba(232,146,124,1)"}},"textfont":{"color":"rgba(232,146,124,1)"},"error_y":{"color":"rgba(232,146,124,1)"},"error_x":{"color":"rgba(232,146,124,1)"},"line":{"color":"rgba(232,146,124,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[22,397,1667,469,11237],"y":["0-70","1000-1500","450-700","70-450","700-1000"],"mode":"markers","hoverinfo":["text","text","text","text","text"],"text":["Species: Cyclothone acclinidens <br>Family: Gonostomatidae <br>n: 22","Species: Cyclothone acclinidens <br>Family: Gonostomatidae <br>n: 397","Species: Cyclothone acclinidens <br>Family: Gonostomatidae <br>n: 1667","Species: Cyclothone acclinidens <br>Family: Gonostomatidae <br>n: 469","Species: Cyclothone acclinidens <br>Family: Gonostomatidae <br>n: 11237"],"type":"scatter","name":"Cyclothone acclinidens","marker":{"color":"rgba(221,149,136,1)","line":{"color":"rgba(221,149,136,1)"}},"textfont":{"color":"rgba(221,149,136,1)"},"error_y":{"color":"rgba(221,149,136,1)"},"error_x":{"color":"rgba(221,149,136,1)"},"line":{"color":"rgba(221,149,136,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[3,36,76],"y":["1000-1500","70-450","700-1000"],"mode":"markers","hoverinfo":["text","text","text"],"text":["Species: Cyclothone atraria <br>Family: Gonostomatidae <br>n: 3","Species: Cyclothone atraria <br>Family: Gonostomatidae <br>n: 36","Species: Cyclothone atraria <br>Family: Gonostomatidae <br>n: 76"],"type":"scatter","name":"Cyclothone atraria","marker":{"color":"rgba(210,151,148,1)","line":{"color":"rgba(210,151,148,1)"}},"textfont":{"color":"rgba(210,151,148,1)"},"error_y":{"color":"rgba(210,151,148,1)"},"error_x":{"color":"rgba(210,151,148,1)"},"line":{"color":"rgba(210,151,148,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[31],"y":["1000-1500"],"mode":"markers","hoverinfo":"text","text":"Species: Cyclothone obscura <br>Family: Gonostomatidae <br>n: 31","type":"scatter","name":"Cyclothone obscura","marker":{"color":"rgba(199,153,159,1)","line":{"color":"rgba(199,153,159,1)"}},"textfont":{"color":"rgba(199,153,159,1)"},"error_y":{"color":"rgba(199,153,159,1)"},"error_x":{"color":"rgba(199,153,159,1)"},"line":{"color":"rgba(199,153,159,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[14,42,17,1016],"y":["1000-1500","450-700","70-450","700-1000"],"mode":"markers","hoverinfo":["text","text","text","text"],"text":["Species: Cyclothone pallida <br>Family: Gonostomatidae <br>n: 14","Species: Cyclothone pallida <br>Family: Gonostomatidae <br>n: 42","Species: Cyclothone pallida <br>Family: Gonostomatidae <br>n: 17","Species: Cyclothone pallida <br>Family: Gonostomatidae <br>n: 1016"],"type":"scatter","name":"Cyclothone pallida","marker":{"color":"rgba(185,155,171,1)","line":{"color":"rgba(185,155,171,1)"}},"textfont":{"color":"rgba(185,155,171,1)"},"error_y":{"color":"rgba(185,155,171,1)"},"error_x":{"color":"rgba(185,155,171,1)"},"line":{"color":"rgba(185,155,171,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1,579],"y":["450-700","70-450"],"mode":"markers","hoverinfo":["text","text"],"text":["Species: Cyclothone signata <br>Family: Gonostomatidae <br>n: 1","Species: Cyclothone signata <br>Family: Gonostomatidae <br>n: 579"],"type":"scatter","name":"Cyclothone signata","marker":{"color":"rgba(171,157,183,1)","line":{"color":"rgba(171,157,183,1)"}},"textfont":{"color":"rgba(171,157,183,1)"},"error_y":{"color":"rgba(171,157,183,1)"},"error_x":{"color":"rgba(171,157,183,1)"},"line":{"color":"rgba(171,157,183,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[2,1],"y":["0-70","70-450"],"mode":"markers","hoverinfo":["text","text"],"text":["Species: Diaphus anderseni <br>Family: Myctophidae <br>n: 2","Species: Diaphus anderseni <br>Family: Myctophidae <br>n: 1"],"type":"scatter","name":"Diaphus anderseni","marker":{"color":"rgba(154,159,195,1)","line":{"color":"rgba(154,159,195,1)"}},"textfont":{"color":"rgba(154,159,195,1)"},"error_y":{"color":"rgba(154,159,195,1)"},"error_x":{"color":"rgba(154,159,195,1)"},"line":{"color":"rgba(154,159,195,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[40,40,113],"y":["0-70","450-700","70-450"],"mode":"markers","hoverinfo":["text","text","text"],"text":["Species: Diaphus pacificus <br>Family: Myctophidae <br>n: 40","Species: Diaphus pacificus <br>Family: Myctophidae <br>n: 40","Species: Diaphus pacificus <br>Family: Myctophidae <br>n: 113"],"type":"scatter","name":"Diaphus pacificus","marker":{"color":"rgba(145,159,203,1)","line":{"color":"rgba(145,159,203,1)"}},"textfont":{"color":"rgba(145,159,203,1)"},"error_y":{"color":"rgba(145,159,203,1)"},"error_x":{"color":"rgba(145,159,203,1)"},"line":{"color":"rgba(145,159,203,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[158,5,214,151,6],"y":["0-70","1000-1500","450-700","70-450","700-1000"],"mode":"markers","hoverinfo":["text","text","text","text","text"],"text":["Species: Diogenicthys laternatus <br>Family: Myctophidae <br>n: 158","Species: Diogenicthys laternatus <br>Family: Myctophidae <br>n: 5","Species: Diogenicthys laternatus <br>Family: Myctophidae <br>n: 214","Species: Diogenicthys laternatus <br>Family: Myctophidae <br>n: 151","Species: Diogenicthys laternatus <br>Family: Myctophidae <br>n: 6"],"type":"scatter","name":"Diogenicthys laternatus","marker":{"color":"rgba(156,158,202,1)","line":{"color":"rgba(156,158,202,1)"}},"textfont":{"color":"rgba(156,158,202,1)"},"error_y":{"color":"rgba(156,158,202,1)"},"error_x":{"color":"rgba(156,158,202,1)"},"line":{"color":"rgba(156,158,202,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1,2],"y":["0-70","70-450"],"mode":"markers","hoverinfo":["text","text"],"text":["Species: Diplophos taenia <br>Family: Gonostomatidae <br>n: 1","Species: Diplophos taenia <br>Family: Gonostomatidae <br>n: 2"],"type":"scatter","name":"Diplophos taenia","marker":{"color":"rgba(168,156,201,1)","line":{"color":"rgba(168,156,201,1)"}},"textfont":{"color":"rgba(168,156,201,1)"},"error_y":{"color":"rgba(168,156,201,1)"},"error_x":{"color":"rgba(168,156,201,1)"},"line":{"color":"rgba(168,156,201,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[3],"y":["1000-1500"],"mode":"markers","hoverinfo":"text","text":"Species: Dolicholagus longirostris <br>Family: Bathylagidae <br>n: 3","type":"scatter","name":"Dolicholagus longirostris","marker":{"color":"rgba(178,153,200,1)","line":{"color":"rgba(178,153,200,1)"}},"textfont":{"color":"rgba(178,153,200,1)"},"error_y":{"color":"rgba(178,153,200,1)"},"error_x":{"color":"rgba(178,153,200,1)"},"line":{"color":"rgba(178,153,200,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1],"y":["0-70"],"mode":"markers","hoverinfo":"text","text":"Species: Eumecichthys fiski <br>Family: Lophotidae <br>n: 1","type":"scatter","name":"Eumecichthys fiski","marker":{"color":"rgba(188,151,199,1)","line":{"color":"rgba(188,151,199,1)"}},"textfont":{"color":"rgba(188,151,199,1)"},"error_y":{"color":"rgba(188,151,199,1)"},"error_x":{"color":"rgba(188,151,199,1)"},"line":{"color":"rgba(188,151,199,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1],"y":["700-1000"],"mode":"markers","hoverinfo":"text","text":"Species: Gigantactis kreffti <br>Family: Gigantactinidae <br>n: 1","type":"scatter","name":"Gigantactis kreffti","marker":{"color":"rgba(198,149,198,1)","line":{"color":"rgba(198,149,198,1)"}},"textfont":{"color":"rgba(198,149,198,1)"},"error_y":{"color":"rgba(198,149,198,1)"},"error_x":{"color":"rgba(198,149,198,1)"},"line":{"color":"rgba(198,149,198,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[2],"y":["70-450"],"mode":"markers","hoverinfo":"text","text":"Species: Gonicthys tenuiculus <br>Family: Myctophidae <br>n: 2","type":"scatter","name":"Gonicthys tenuiculus","marker":{"color":"rgba(208,146,197,1)","line":{"color":"rgba(208,146,197,1)"}},"textfont":{"color":"rgba(208,146,197,1)"},"error_y":{"color":"rgba(208,146,197,1)"},"error_x":{"color":"rgba(208,146,197,1)"},"line":{"color":"rgba(208,146,197,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[4,3,1,1],"y":["0-70","450-700","70-450","700-1000"],"mode":"markers","hoverinfo":["text","text","text","text"],"text":["Species: Hygophum proximum <br>Family: Myctophidae <br>n: 4","Species: Hygophum proximum <br>Family: Myctophidae <br>n: 3","Species: Hygophum proximum <br>Family: Myctophidae <br>n: 1","Species: Hygophum proximum <br>Family: Myctophidae <br>n: 1"],"type":"scatter","name":"Hygophum proximum","marker":{"color":"rgba(217,143,196,1)","line":{"color":"rgba(217,143,196,1)"}},"textfont":{"color":"rgba(217,143,196,1)"},"error_y":{"color":"rgba(217,143,196,1)"},"error_x":{"color":"rgba(217,143,196,1)"},"line":{"color":"rgba(217,143,196,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[45,1,25,17,70],"y":["0-70","1000-1500","450-700","70-450","700-1000"],"mode":"markers","hoverinfo":["text","text","text","text","text"],"text":["Species: Idiacanthus antrostomus <br>Family: Stomiidae <br>n: 45","Species: Idiacanthus antrostomus <br>Family: Stomiidae <br>n: 1","Species: Idiacanthus antrostomus <br>Family: Stomiidae <br>n: 25","Species: Idiacanthus antrostomus <br>Family: Stomiidae <br>n: 17","Species: Idiacanthus antrostomus <br>Family: Stomiidae <br>n: 70"],"type":"scatter","name":"Idiacanthus antrostomus","marker":{"color":"rgba(226,140,196,1)","line":{"color":"rgba(226,140,196,1)"}},"textfont":{"color":"rgba(226,140,196,1)"},"error_y":{"color":"rgba(226,140,196,1)"},"error_x":{"color":"rgba(226,140,196,1)"},"line":{"color":"rgba(226,140,196,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[4,5,14,13,27],"y":["450-700","0-70","450-700","70-450","700-1000"],"mode":"markers","hoverinfo":["text","text","text","text","text"],"text":["Species: Idiacanthus fasciola <br>Family:  <br>n: 4","Species: Idiacanthus fasciola <br>Family: Stomiidae <br>n: 5","Species: Idiacanthus fasciola <br>Family: Stomiidae <br>n: 14","Species: Idiacanthus fasciola <br>Family: Stomiidae <br>n: 13","Species: Idiacanthus fasciola <br>Family: Stomiidae <br>n: 27"],"type":"scatter","name":"Idiacanthus fasciola","marker":{"color":"rgba(229,143,190,1)","line":{"color":"rgba(229,143,190,1)"}},"textfont":{"color":"rgba(229,143,190,1)"},"error_y":{"color":"rgba(229,143,190,1)"},"error_x":{"color":"rgba(229,143,190,1)"},"line":{"color":"rgba(229,143,190,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1,1,6],"y":["1000-1500","70-450","700-1000"],"mode":"markers","hoverinfo":["text","text","text"],"text":["Species: Kali kerberti <br>Family: Chiasmodontidae <br>n: 1","Species: Kali kerberti <br>Family: Chiasmodontidae <br>n: 1","Species: Kali kerberti <br>Family: Chiasmodontidae <br>n: 6"],"type":"scatter","name":"Kali kerberti","marker":{"color":"rgba(224,153,179,1)","line":{"color":"rgba(224,153,179,1)"}},"textfont":{"color":"rgba(224,153,179,1)"},"error_y":{"color":"rgba(224,153,179,1)"},"error_x":{"color":"rgba(224,153,179,1)"},"line":{"color":"rgba(224,153,179,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[3],"y":["1000-1500"],"mode":"markers","hoverinfo":"text","text":"Species: Kali macrodon <br>Family: Chiasmodontidae <br>n: 3","type":"scatter","name":"Kali macrodon","marker":{"color":"rgba(218,163,167,1)","line":{"color":"rgba(218,163,167,1)"}},"textfont":{"color":"rgba(218,163,167,1)"},"error_y":{"color":"rgba(218,163,167,1)"},"error_x":{"color":"rgba(218,163,167,1)"},"line":{"color":"rgba(218,163,167,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[2,32,15,9],"y":["1000-1500","450-700","70-450","700-1000"],"mode":"markers","hoverinfo":["text","text","text","text"],"text":["Species: Lampanyctus bristori <br>Family: Myctophidae <br>n: 2","Species: Lampanyctus bristori <br>Family: Myctophidae <br>n: 32","Species: Lampanyctus bristori <br>Family: Myctophidae <br>n: 15","Species: Lampanyctus bristori <br>Family: Myctophidae <br>n: 9"],"type":"scatter","name":"Lampanyctus bristori","marker":{"color":"rgba(212,172,156,1)","line":{"color":"rgba(212,172,156,1)"}},"textfont":{"color":"rgba(212,172,156,1)"},"error_y":{"color":"rgba(212,172,156,1)"},"error_x":{"color":"rgba(212,172,156,1)"},"line":{"color":"rgba(212,172,156,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[11,16,18,6],"y":["0-70","1000-1500","450-700","700-1000"],"mode":"markers","hoverinfo":["text","text","text","text"],"text":["Species: Lampanyctus omostigma <br>Family: Myctophidae <br>n: 11","Species: Lampanyctus omostigma <br>Family: Myctophidae <br>n: 16","Species: Lampanyctus omostigma <br>Family: Myctophidae <br>n: 18","Species: Lampanyctus omostigma <br>Family: Myctophidae <br>n: 6"],"type":"scatter","name":"Lampanyctus omostigma","marker":{"color":"rgba(205,180,144,1)","line":{"color":"rgba(205,180,144,1)"}},"textfont":{"color":"rgba(205,180,144,1)"},"error_y":{"color":"rgba(205,180,144,1)"},"error_x":{"color":"rgba(205,180,144,1)"},"line":{"color":"rgba(205,180,144,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[24,101,19,2,30],"y":["0-70","1000-1500","450-700","70-450","700-1000"],"mode":"markers","hoverinfo":["text","text","text","text","text"],"text":["Species: Lampanyctus parvicauda <br>Family: Myctophidae <br>n: 24","Species: Lampanyctus parvicauda <br>Family: Myctophidae <br>n: 101","Species: Lampanyctus parvicauda <br>Family: Myctophidae <br>n: 19","Species: Lampanyctus parvicauda <br>Family: Myctophidae <br>n: 2","Species: Lampanyctus parvicauda <br>Family: Myctophidae <br>n: 30"],"type":"scatter","name":"Lampanyctus parvicauda","marker":{"color":"rgba(198,189,132,1)","line":{"color":"rgba(198,189,132,1)"}},"textfont":{"color":"rgba(198,189,132,1)"},"error_y":{"color":"rgba(198,189,132,1)"},"error_x":{"color":"rgba(198,189,132,1)"},"line":{"color":"rgba(198,189,132,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1,1],"y":["1000-1500","700-1000"],"mode":"markers","hoverinfo":["text","text"],"text":["Species: Lophodolus acanthognathus <br>Family: Oneirodidae <br>n: 1","Species: Lophodolus acanthognathus <br>Family: Oneirodidae <br>n: 1"],"type":"scatter","name":"Lophodolus acanthognathus","marker":{"color":"rgba(190,197,119,1)","line":{"color":"rgba(190,197,119,1)"}},"textfont":{"color":"rgba(190,197,119,1)"},"error_y":{"color":"rgba(190,197,119,1)"},"error_x":{"color":"rgba(190,197,119,1)"},"line":{"color":"rgba(190,197,119,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1,1],"y":["1000-1500","700-1000"],"mode":"markers","hoverinfo":["text","text"],"text":["Species: Malacosteus niger <br>Family: Stomiidae <br>n: 1","Species: Malacosteus niger <br>Family: Stomiidae <br>n: 1"],"type":"scatter","name":"Malacosteus niger","marker":{"color":"rgba(181,205,105,1)","line":{"color":"rgba(181,205,105,1)"}},"textfont":{"color":"rgba(181,205,105,1)"},"error_y":{"color":"rgba(181,205,105,1)"},"error_x":{"color":"rgba(181,205,105,1)"},"line":{"color":"rgba(181,205,105,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[3,1],"y":["450-700","700-1000"],"mode":"markers","hoverinfo":["text","text"],"text":["Species: Melamphaes acanthomus <br>Family: Melamphaidae <br>n: 3","Species: Melamphaes acanthomus <br>Family: Melamphaidae <br>n: 1"],"type":"scatter","name":"Melamphaes acanthomus","marker":{"color":"rgba(171,213,91,1)","line":{"color":"rgba(171,213,91,1)"}},"textfont":{"color":"rgba(171,213,91,1)"},"error_y":{"color":"rgba(171,213,91,1)"},"error_x":{"color":"rgba(171,213,91,1)"},"line":{"color":"rgba(171,213,91,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[2,1,1],"y":["1000-1500","450-700","700-1000"],"mode":"markers","hoverinfo":["text","text","text"],"text":["Species: Melamphaes laeviceps <br>Family: Melamphaidae <br>n: 2","Species: Melamphaes laeviceps <br>Family: Melamphaidae <br>n: 1","Species: Melamphaes laeviceps <br>Family: Melamphaidae <br>n: 1"],"type":"scatter","name":"Melamphaes laeviceps","marker":{"color":"rgba(172,216,82,1)","line":{"color":"rgba(172,216,82,1)"}},"textfont":{"color":"rgba(172,216,82,1)"},"error_y":{"color":"rgba(172,216,82,1)"},"error_x":{"color":"rgba(172,216,82,1)"},"line":{"color":"rgba(172,216,82,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[4,13,4],"y":["1000-1500","450-700","700-1000"],"mode":"markers","hoverinfo":["text","text","text"],"text":["Species: Melamphaes macrocephalus <br>Family: Melamphaidae <br>n: 4","Species: Melamphaes macrocephalus <br>Family: Melamphaidae <br>n: 13","Species: Melamphaes macrocephalus <br>Family: Melamphaidae <br>n: 4"],"type":"scatter","name":"Melamphaes macrocephalus","marker":{"color":"rgba(183,217,79,1)","line":{"color":"rgba(183,217,79,1)"}},"textfont":{"color":"rgba(183,217,79,1)"},"error_y":{"color":"rgba(183,217,79,1)"},"error_x":{"color":"rgba(183,217,79,1)"},"line":{"color":"rgba(183,217,79,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[14,13,3,11],"y":["1000-1500","450-700","70-450","700-1000"],"mode":"markers","hoverinfo":["text","text","text","text"],"text":["Species: Melamphaes spinifer <br>Family: Melamphaidae <br>n: 14","Species: Melamphaes spinifer <br>Family: Melamphaidae <br>n: 13","Species: Melamphaes spinifer <br>Family: Melamphaidae <br>n: 3","Species: Melamphaes spinifer <br>Family: Melamphaidae <br>n: 11"],"type":"scatter","name":"Melamphaes spinifer","marker":{"color":"rgba(194,217,75,1)","line":{"color":"rgba(194,217,75,1)"}},"textfont":{"color":"rgba(194,217,75,1)"},"error_y":{"color":"rgba(194,217,75,1)"},"error_x":{"color":"rgba(194,217,75,1)"},"line":{"color":"rgba(194,217,75,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[3],"y":["700-1000"],"mode":"markers","hoverinfo":"text","text":"Species: Melanocetus johnsonii <br>Family: Melanocetidae <br>n: 3","type":"scatter","name":"Melanocetus johnsonii","marker":{"color":"rgba(204,217,71,1)","line":{"color":"rgba(204,217,71,1)"}},"textfont":{"color":"rgba(204,217,71,1)"},"error_y":{"color":"rgba(204,217,71,1)"},"error_x":{"color":"rgba(204,217,71,1)"},"line":{"color":"rgba(204,217,71,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[2],"y":["1000-1500"],"mode":"markers","hoverinfo":"text","text":"Species: Melanocetus niger <br>Family: Melanocetidae <br>n: 2","type":"scatter","name":"Melanocetus niger","marker":{"color":"rgba(214,217,67,1)","line":{"color":"rgba(214,217,67,1)"}},"textfont":{"color":"rgba(214,217,67,1)"},"error_y":{"color":"rgba(214,217,67,1)"},"error_x":{"color":"rgba(214,217,67,1)"},"line":{"color":"rgba(214,217,67,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1],"y":["700-1000"],"mode":"markers","hoverinfo":"text","text":"Species: Mentodus facilis <br>Family: Platytroctidae <br>n: 1","type":"scatter","name":"Mentodus facilis","marker":{"color":"rgba(224,217,63,1)","line":{"color":"rgba(224,217,63,1)"}},"textfont":{"color":"rgba(224,217,63,1)"},"error_y":{"color":"rgba(224,217,63,1)"},"error_x":{"color":"rgba(224,217,63,1)"},"line":{"color":"rgba(224,217,63,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1],"y":["1000-1500"],"mode":"markers","hoverinfo":"text","text":"Species: Myctophum aurolaternatum <br>Family: Myctophidae <br>n: 1","type":"scatter","name":"Myctophum aurolaternatum","marker":{"color":"rgba(234,217,59,1)","line":{"color":"rgba(234,217,59,1)"}},"textfont":{"color":"rgba(234,217,59,1)"},"error_y":{"color":"rgba(234,217,59,1)"},"error_x":{"color":"rgba(234,217,59,1)"},"line":{"color":"rgba(234,217,59,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1,2,2],"y":["0-70","70-450","700-1000"],"mode":"markers","hoverinfo":["text","text","text"],"text":["Species: Myctophum nitidulum <br>Family: Myctophidae <br>n: 1","Species: Myctophum nitidulum <br>Family: Myctophidae <br>n: 2","Species: Myctophum nitidulum <br>Family: Myctophidae <br>n: 2"],"type":"scatter","name":"Myctophum nitidulum","marker":{"color":"rgba(243,217,54,1)","line":{"color":"rgba(243,217,54,1)"}},"textfont":{"color":"rgba(243,217,54,1)"},"error_y":{"color":"rgba(243,217,54,1)"},"error_x":{"color":"rgba(243,217,54,1)"},"line":{"color":"rgba(243,217,54,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1],"y":["700-1000"],"mode":"markers","hoverinfo":"text","text":"Species: Nemichthys scolopaceus <br>Family: Nemichthyidae <br>n: 1","type":"scatter","name":"Nemichthys scolopaceus","marker":{"color":"rgba(252,217,49,1)","line":{"color":"rgba(252,217,49,1)"}},"textfont":{"color":"rgba(252,217,49,1)"},"error_y":{"color":"rgba(252,217,49,1)"},"error_x":{"color":"rgba(252,217,49,1)"},"line":{"color":"rgba(252,217,49,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[3],"y":["0-70"],"mode":"markers","hoverinfo":"text","text":"Species: Nesiarchus nasutus <br>Family: Gempylidae <br>n: 3","type":"scatter","name":"Nesiarchus nasutus","marker":{"color":"rgba(253,215,59,1)","line":{"color":"rgba(253,215,59,1)"}},"textfont":{"color":"rgba(253,215,59,1)"},"error_y":{"color":"rgba(253,215,59,1)"},"error_x":{"color":"rgba(253,215,59,1)"},"line":{"color":"rgba(253,215,59,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[3,10],"y":["1000-1500","700-1000"],"mode":"markers","hoverinfo":["text","text"],"text":["Species: Nezumia parini <br>Family: Macrouridae <br>n: 3","Species: Nezumia parini <br>Family: Macrouridae <br>n: 10"],"type":"scatter","name":"Nezumia parini","marker":{"color":"rgba(251,213,74,1)","line":{"color":"rgba(251,213,74,1)"}},"textfont":{"color":"rgba(251,213,74,1)"},"error_y":{"color":"rgba(251,213,74,1)"},"error_x":{"color":"rgba(251,213,74,1)"},"line":{"color":"rgba(251,213,74,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[2],"y":["700-1000"],"mode":"markers","hoverinfo":"text","text":"Species: Oneirodes luetkenii <br>Family: Oneirodidae <br>n: 2","type":"scatter","name":"Oneirodes luetkenii","marker":{"color":"rgba(248,210,86,1)","line":{"color":"rgba(248,210,86,1)"}},"textfont":{"color":"rgba(248,210,86,1)"},"error_y":{"color":"rgba(248,210,86,1)"},"error_x":{"color":"rgba(248,210,86,1)"},"line":{"color":"rgba(248,210,86,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1],"y":["1000-1500"],"mode":"markers","hoverinfo":"text","text":"Species: Paracaristius nudarcus <br>Family: Caristiidae <br>n: 1","type":"scatter","name":"Paracaristius nudarcus","marker":{"color":"rgba(246,208,98,1)","line":{"color":"rgba(246,208,98,1)"}},"textfont":{"color":"rgba(246,208,98,1)"},"error_y":{"color":"rgba(246,208,98,1)"},"error_x":{"color":"rgba(246,208,98,1)"},"line":{"color":"rgba(246,208,98,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[4],"y":["1000-1500"],"mode":"markers","hoverinfo":"text","text":"Species: Poromitra nigrofulva <br>Family: Melamphaidae <br>n: 4","type":"scatter","name":"Poromitra nigrofulva","marker":{"color":"rgba(243,206,108,1)","line":{"color":"rgba(243,206,108,1)"}},"textfont":{"color":"rgba(243,206,108,1)"},"error_y":{"color":"rgba(243,206,108,1)"},"error_x":{"color":"rgba(243,206,108,1)"},"line":{"color":"rgba(243,206,108,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[18],"y":["1000-1500"],"mode":"markers","hoverinfo":"text","text":"Species: Poromitra oscitans <br>Family: Melamphaidae <br>n: 18","type":"scatter","name":"Poromitra oscitans","marker":{"color":"rgba(240,203,118,1)","line":{"color":"rgba(240,203,118,1)"}},"textfont":{"color":"rgba(240,203,118,1)"},"error_y":{"color":"rgba(240,203,118,1)"},"error_x":{"color":"rgba(240,203,118,1)"},"line":{"color":"rgba(240,203,118,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1],"y":["70-450"],"mode":"markers","hoverinfo":"text","text":"Species: Rosenblaticthys volveris <br>Family: Scopelarchidae <br>n: 1","type":"scatter","name":"Rosenblaticthys volveris","marker":{"color":"rgba(237,201,128,1)","line":{"color":"rgba(237,201,128,1)"}},"textfont":{"color":"rgba(237,201,128,1)"},"error_y":{"color":"rgba(237,201,128,1)"},"error_x":{"color":"rgba(237,201,128,1)"},"line":{"color":"rgba(237,201,128,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[2,9,1],"y":["450-700","70-450","700-1000"],"mode":"markers","hoverinfo":["text","text","text"],"text":["Species: Scopelarchoides nicholsi <br>Family: Scopelarchidae <br>n: 2","Species: Scopelarchoides nicholsi <br>Family: Scopelarchidae <br>n: 9","Species: Scopelarchoides nicholsi <br>Family: Scopelarchidae <br>n: 1"],"type":"scatter","name":"Scopelarchoides nicholsi","marker":{"color":"rgba(233,199,137,1)","line":{"color":"rgba(233,199,137,1)"}},"textfont":{"color":"rgba(233,199,137,1)"},"error_y":{"color":"rgba(233,199,137,1)"},"error_x":{"color":"rgba(233,199,137,1)"},"line":{"color":"rgba(233,199,137,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1,22,57],"y":["0-70","450-700","700-1000"],"mode":"markers","hoverinfo":["text","text","text"],"text":["Species: Scopelengys tristis <br>Family: Neoscopelidae <br>n: 1","Species: Scopelengys tristis <br>Family: Neoscopelidae <br>n: 22","Species: Scopelengys tristis <br>Family: Neoscopelidae <br>n: 57"],"type":"scatter","name":"Scopelengys tristis","marker":{"color":"rgba(230,196,147,1)","line":{"color":"rgba(230,196,147,1)"}},"textfont":{"color":"rgba(230,196,147,1)"},"error_y":{"color":"rgba(230,196,147,1)"},"error_x":{"color":"rgba(230,196,147,1)"},"line":{"color":"rgba(230,196,147,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[78,131],"y":["1000-1500","700-1000"],"mode":"markers","hoverinfo":["text","text"],"text":["Species: Scopeloberyx malayanus <br>Family: Melamphaidae <br>n: 78","Species: Scopeloberyx malayanus <br>Family: Melamphaidae <br>n: 131"],"type":"scatter","name":"Scopeloberyx malayanus","marker":{"color":"rgba(225,194,151,1)","line":{"color":"rgba(225,194,151,1)"}},"textfont":{"color":"rgba(225,194,151,1)"},"error_y":{"color":"rgba(225,194,151,1)"},"error_x":{"color":"rgba(225,194,151,1)"},"line":{"color":"rgba(225,194,151,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[2],"y":["700-1000"],"mode":"markers","hoverinfo":"text","text":"Species: Scopeloberyx pequenoi <br>Family: Melamphaidae <br>n: 2","type":"scatter","name":"Scopeloberyx pequenoi","marker":{"color":"rgba(219,192,155,1)","line":{"color":"rgba(219,192,155,1)"}},"textfont":{"color":"rgba(219,192,155,1)"},"error_y":{"color":"rgba(219,192,155,1)"},"error_x":{"color":"rgba(219,192,155,1)"},"line":{"color":"rgba(219,192,155,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[5,1],"y":["1000-1500","700-1000"],"mode":"markers","hoverinfo":["text","text"],"text":["Species: Scopeloberyx robustus <br>Family: Melamphaidae <br>n: 5","Species: Scopeloberyx robustus <br>Family: Melamphaidae <br>n: 1"],"type":"scatter","name":"Scopeloberyx robustus","marker":{"color":"rgba(214,190,158,1)","line":{"color":"rgba(214,190,158,1)"}},"textfont":{"color":"rgba(214,190,158,1)"},"error_y":{"color":"rgba(214,190,158,1)"},"error_x":{"color":"rgba(214,190,158,1)"},"line":{"color":"rgba(214,190,158,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[6,9,148,103,430],"y":["0-70","1000-1500","450-700","70-450","700-1000"],"mode":"markers","hoverinfo":["text","text","text","text","text"],"text":["Species: Scopelogadus bispinosus <br>Family: Melamphaidae <br>n: 6","Species: Scopelogadus bispinosus <br>Family: Melamphaidae <br>n: 9","Species: Scopelogadus bispinosus <br>Family: Melamphaidae <br>n: 148","Species: Scopelogadus bispinosus <br>Family: Melamphaidae <br>n: 103","Species: Scopelogadus bispinosus <br>Family: Melamphaidae <br>n: 430"],"type":"scatter","name":"Scopelogadus bispinosus","marker":{"color":"rgba(208,189,162,1)","line":{"color":"rgba(208,189,162,1)"}},"textfont":{"color":"rgba(208,189,162,1)"},"error_y":{"color":"rgba(208,189,162,1)"},"error_x":{"color":"rgba(208,189,162,1)"},"line":{"color":"rgba(208,189,162,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[2,3,26],"y":["1000-1500","450-700","700-1000"],"mode":"markers","hoverinfo":["text","text","text"],"text":["Species: Sternoptyx pseudobscura <br>Family: Sternoptychidae <br>n: 2","Species: Sternoptyx pseudobscura <br>Family: Sternoptychidae <br>n: 3","Species: Sternoptyx pseudobscura <br>Family: Sternoptychidae <br>n: 26"],"type":"scatter","name":"Sternoptyx pseudobscura","marker":{"color":"rgba(203,187,165,1)","line":{"color":"rgba(203,187,165,1)"}},"textfont":{"color":"rgba(203,187,165,1)"},"error_y":{"color":"rgba(203,187,165,1)"},"error_x":{"color":"rgba(203,187,165,1)"},"line":{"color":"rgba(203,187,165,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[2],"y":["70-450"],"mode":"markers","hoverinfo":"text","text":"Species: Stomias atriventer <br>Family: Stomiidae <br>n: 2","type":"scatter","name":"Stomias atriventer","marker":{"color":"rgba(197,185,169,1)","line":{"color":"rgba(197,185,169,1)"}},"textfont":{"color":"rgba(197,185,169,1)"},"error_y":{"color":"rgba(197,185,169,1)"},"error_x":{"color":"rgba(197,185,169,1)"},"line":{"color":"rgba(197,185,169,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[2,3,2],"y":["0-70","450-700","700-1000"],"mode":"markers","hoverinfo":["text","text","text"],"text":["Species: Symbolophorous reversus <br>Family: Myctophidae <br>n: 2","Species: Symbolophorous reversus <br>Family: Myctophidae <br>n: 3","Species: Symbolophorous reversus <br>Family: Myctophidae <br>n: 2"],"type":"scatter","name":"Symbolophorous reversus","marker":{"color":"rgba(191,183,172,1)","line":{"color":"rgba(191,183,172,1)"}},"textfont":{"color":"rgba(191,183,172,1)"},"error_y":{"color":"rgba(191,183,172,1)"},"error_x":{"color":"rgba(191,183,172,1)"},"line":{"color":"rgba(191,183,172,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1],"y":["450-700"],"mode":"markers","hoverinfo":"text","text":"Species: Talismania bifurcata <br>Family: Alepocephalidae <br>n: 1","type":"scatter","name":"Talismania bifurcata","marker":{"color":"rgba(185,181,176,1)","line":{"color":"rgba(185,181,176,1)"}},"textfont":{"color":"rgba(185,181,176,1)"},"error_y":{"color":"rgba(185,181,176,1)"},"error_x":{"color":"rgba(185,181,176,1)"},"line":{"color":"rgba(185,181,176,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[120,1,10,410,4],"y":["0-70","1000-1500","450-700","70-450","700-1000"],"mode":"markers","hoverinfo":["text","text","text","text","text"],"text":["Species: Vinciguerria lucetia <br>Family: Phosichthyidae <br>n: 120","Species: Vinciguerria lucetia <br>Family: Phosichthyidae <br>n: 1","Species: Vinciguerria lucetia <br>Family: Phosichthyidae <br>n: 10","Species: Vinciguerria lucetia <br>Family: Phosichthyidae <br>n: 410","Species: Vinciguerria lucetia <br>Family: Phosichthyidae <br>n: 4"],"type":"scatter","name":"Vinciguerria lucetia","marker":{"color":"rgba(179,179,179,1)","line":{"color":"rgba(179,179,179,1)"}},"textfont":{"color":"rgba(179,179,179,1)"},"error_y":{"color":"rgba(179,179,179,1)"},"error_x":{"color":"rgba(179,179,179,1)"},"line":{"color":"rgba(179,179,179,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
-<p>This interactive plot provides a simple visual of the fish species present within each depth range. You can select/deselect species from the key to examine individual species! :D</p>
-<p>I am interested in the <strong>diets</strong> of the <strong>most abundant fishes</strong>.</p>
+<p>This interactive plot provides a visual of the fish species present within each depth range and their total counts (n) at each depth. You can select/deselect species from the key to examine individual species! :D</p>
+<p>I am interested in the diets of the <strong>most abundant fishes</strong>.</p>
 <p>While Cyclothone technically dominate in abundance, my focus is specifically on <strong>non-cyclothone</strong> micronekton since there are logistical errors in dissecting specimens from this taxonomic group.</p>
 <p>The most abundant species chosen for gut content analysis include:</p>
 <ul>
@@ -214,40 +217,37 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="kite-diagrams-of-targeted-species" class="level1">
 <h1>Kite Diagrams of Targeted Species</h1>
-<ul>
-<li>Kite diagrams display changes in vertical distribution during day/night and highlight migration behaviors that are often associated with feeding</li>
-</ul>
 <div id="kiteCarousel" class="carousel slide" data-bs-ride="false" style="max-width: 700px; margin: 0 auto;">
 <div class="carousel-inner">
 <div class="carousel-item active">
 <p><img src="figs/kite_Diaphus_pacificus.png" class="d-block w-100"></p>
 </div>
 <div class="carousel-item">
+<p><img src="figs/kite_Vinciguerria_lucetia.png" class="d-block w-100"></p>
+</div>
+<div class="carousel-item">
 <p><img src="figs/kite_Diogenicthys_laternatus.png" class="d-block w-100"></p>
-</div>
-<div class="carousel-item">
-<p><img src="figs/kite_Lampanyctus_parvicauda.png" class="d-block w-100"></p>
-</div>
-<div class="carousel-item">
-<p><img src="figs/kite_Scopeloberyx_malayanus.png" class="d-block w-100"></p>
-</div>
-<div class="carousel-item">
-<p><img src="figs/kite_Scopelogadus_bispinosus.png" class="d-block w-100"></p>
 </div>
 <div class="carousel-item">
 <p><img src="figs/kite_Argyropelecus_lychnus.png" class="d-block w-100"></p>
 </div>
 <div class="carousel-item">
-<p><img src="figs/kite_Bathylagoides_nigrigenys.png" class="d-block w-100"></p>
+<p><img src="figs/kite_Lampanyctus_parvicauda.png" class="d-block w-100"></p>
 </div>
 <div class="carousel-item">
-<p><img src="figs/kite_Vinciguerria_lucetia.png" class="d-block w-100"></p>
+<p><img src="figs/kite_Scopelogadus_bispinosus.png" class="d-block w-100"></p>
 </div>
 <div class="carousel-item">
 <p><img src="figs/kite_Idiacanthus_antrostomus.png" class="d-block w-100"></p>
 </div>
 <div class="carousel-item">
 <p><img src="figs/kite_Scopelengys_tristis.png" class="d-block w-100"></p>
+</div>
+<div class="carousel-item">
+<p><img src="figs/kite_Bathylagoides_nigrigenys.png" class="d-block w-100"></p>
+</div>
+<div class="carousel-item">
+<p><img src="figs/kite_Scopeloberyx_malayanus.png" class="d-block w-100"></p>
 </div>
 </div>
 <button class="carousel-control-prev" type="button" data-bs-target="#kiteCarousel" data-bs-slide="prev">
@@ -257,12 +257,1545 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span class="carousel-control-next-icon"></span>
 </button>
 </div>
-<p>What does this show us?</p>
+<p><strong>Scroll through! :D</strong></p>
+<p>These kite diagrams display changes in vertical distribution during day/night and highlight migration behaviors that are often associated with feeding</p>
+<p>Based on these patterns, we can categorize them based on their <strong>migration characterization</strong>:</p>
+<p><strong>Upper Oxycline Migrators</strong></p>
 <ul>
-<li>Micronekton can have different migration patterns (even within the same species during different seasons)</li>
-<li>We can categorize species based on migration</li>
-<li>Migration patterns can influence feeding behaviors</li>
+<li><em>Diaphus pacificus</em></li>
+<li><em>Vinciguerria lucetia</em></li>
+<li><em>Diogenichthys laternatus</em></li>
 </ul>
+<p><strong>Upper Oxycline Non-Migrator</strong></p>
+<ul>
+<li><em>Argyropelecus lychnus</em></li>
+</ul>
+<p><strong>Lower Oxycline Migrators</strong></p>
+<ul>
+<li><em>Scopelogadus bispinosus</em></li>
+<li><em>Idiacanthus antrostomus</em></li>
+<li><em>Bathylagoides nigrigenys</em></li>
+<li><em>Lampanyctus parvicauda</em></li>
+</ul>
+<p><strong>Lower Oxycline Non-Migrators</strong></p>
+<ul>
+<li><em>Scopelengys tristis</em></li>
+<li><em>Scopeloberyx malayanus</em></li>
+</ul>
+</section>
+<section id="subsampling" class="level1">
+<h1>Subsampling</h1>
+<p>Now that our species are selected, let’t subsample 100 specimens each, making sure it is proportional across samples.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-striped table-hover caption-top table-sm small" data-quarto-postprocess="true">
+<caption>CCZ Fish Subsampling</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">LTU</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Label</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Total n</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Subsample n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td rowspan="21" style="text-align: left; vertical-align: top !important;">Argyropelecus lychnus</td>
+<td style="text-align: left;">DG5B_M10_S12_4_822_Argyropelecus lychnus</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">17</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S11_4_748_Argyropelecus lychnus</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S2_4_128_Argyropelecus lychnus</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S6_4_410_Argyropelecus lychnus</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S9_4_605_Argyropelecus lychnus</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S10_4_675_Argyropelecus lychnus</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S4_4_263_Argyropelecus lychnus</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S5_4_307_Argyropelecus lychnus</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S1_3_43_Argyropelecus lychnus</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S1_4_61_Argyropelecus lychnus</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S3_4_196_Argyropelecus lychnus</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S7_4_465_Argyropelecus lychnus</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S8_4_541_Argyropelecus lychnus</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S1_1_18_Argyropelecus lychnus</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S13_4_887_Argyropelecus lychnus</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S19_4_386_Argyropelecus lychnus</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S2_2_100_Argyropelecus lychnus</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S10_3_661_Argyropelecus lychnus</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S11_3_739_Argyropelecus lychnus</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S16_4_183_Argyropelecus lychnus</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S17_4_256_Argyropelecus lychnus</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td rowspan="38" style="text-align: left; vertical-align: top !important;">Bathylagoides nigrigenys</td>
+<td style="text-align: left;">DG5C_M10_S16_2_157_Bathylagoides nigrigenys</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S14_2_29_Bathylagoides nigrigenys</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S19_2_351_Bathylagoides nigrigenys</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S15_2_99_Bathylagoides nigrigenys</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S22_2_495_Bathylagoides nigrigenys</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S27_2_798_Bathylagoides nigrigenys</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S11_2_714_Bathylagoides nigrigenys</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S18_2_292_Bathylagoides nigrigenys</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S9_2_575_Bathylagoides nigrigenys</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S10_2_646_Bathylagoides nigrigenys</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S12_2_791_Bathylagoides nigrigenys</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S3_4_197_Bathylagoides nigrigenys</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S8_4_535_Bathylagoides nigrigenys</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S17_2_225_Bathylagoides nigrigenys</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S25_2_705_Bathylagoides nigrigenys</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S4_2_226_Bathylagoides nigrigenys</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S13_2_868_Bathylagoides nigrigenys</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S4_4_264_Bathylagoides nigrigenys</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S7_4_469_Bathylagoides nigrigenys</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S9_4_600_Bathylagoides nigrigenys</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S20_2_432_Bathylagoides nigrigenys</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S24_2_631_Bathylagoides nigrigenys</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S14_4_55_Bathylagoides nigrigenys</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S15_4_116_Bathylagoides nigrigenys</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S2_2_93_Bathylagoides nigrigenys</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S6_2_376_Bathylagoides nigrigenys</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S8_2_507_Bathylagoides nigrigenys</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S10_3_665_Bathylagoides nigrigenys</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S12_3_811_Bathylagoides nigrigenys</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S5_4_302_Bathylagoides nigrigenys</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S23_1_548_Bathylagoides nigrigenys</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S23_2_564_Bathylagoides nigrigenys</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S15_3_110_Bathylagoides nigrigenys</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S22_3_521_Bathylagoides nigrigenys</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S24_3_660_Bathylagoides nigrigenys</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S25_3_722_Bathylagoides nigrigenys</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S16_4_181_Bathylagoides nigrigenys</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S24_5_679_Bathylagoides nigrigenys</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td rowspan="23" style="text-align: left; vertical-align: top !important;">Diaphus pacificus</td>
+<td style="text-align: left;">DG5B_M10_S13_4_891_Diaphus pacificus</td>
+<td style="text-align: right;">45</td>
+<td style="text-align: right;">23</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S10_3_670_Diaphus pacificus</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S2_4_130_Diaphus pacificus</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">9</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S1_3_49_Diaphus pacificus</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S22_4_527_Diaphus pacificus</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S17_4_251_Diaphus pacificus</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S19_4_380_Diaphus pacificus</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S6_4_407_Diaphus pacificus</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S9_5_617_Diaphus pacificus</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S14_5_68_Diaphus pacificus</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S15_5_121_Diaphus pacificus</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S10_4_672_Diaphus pacificus</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S11_3_729_Diaphus pacificus</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S13_3_880_Diaphus pacificus</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S20_4_459_Diaphus pacificus</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S16_5_200_Diaphus pacificus</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S25_5_741_Diaphus pacificus</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S9_4_603_Diaphus pacificus</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S7_5_481_Diaphus pacificus</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S15_3_109_Diaphus pacificus</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S17_3_247_Diaphus pacificus</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S14_4_50_Diaphus pacificus</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S26_5_763_Diaphus pacificus</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td rowspan="31" style="text-align: left; vertical-align: top !important;">Diogenicthys laternatus</td>
+<td style="text-align: left;">DG5B_M10_S6_3_392_Diogenicthys laternatus</td>
+<td style="text-align: right;">79</td>
+<td style="text-align: right;">19</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S13_4_891_Diogenicthys laternatus</td>
+<td style="text-align: right;">47</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S1_3_49_Diogenicthys laternatus</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S12_4_820_Diogenicthys laternatus</td>
+<td style="text-align: right;">33</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S14_5_68_Diogenicthys laternatus</td>
+<td style="text-align: right;">33</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S15_5_121_Diogenicthys laternatus</td>
+<td style="text-align: right;">28</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S16_5_200_Diogenicthys laternatus</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S20_3_445_Diogenicthys laternatus</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S11_3_729_Diogenicthys laternatus</td>
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S19_3_372_Diogenicthys laternatus</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S23_3_587_Diogenicthys laternatus</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S19_4_380_Diogenicthys laternatus</td>
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S20_4_459_Diogenicthys laternatus</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S26_5_763_Diogenicthys laternatus</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S27_5_837_Diogenicthys laternatus</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S12_3_803_Diogenicthys laternatus</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S7_5_481_Diogenicthys laternatus</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S9_5_617_Diogenicthys laternatus</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S25_5_741_Diogenicthys laternatus</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S1_2_35_Diogenicthys laternatus</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S2_3_112_Diogenicthys laternatus</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S10_3_670_Diogenicthys laternatus</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S13_3_880_Diogenicthys laternatus</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S3_5_204_Diogenicthys laternatus</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S4_5_272_Diogenicthys laternatus</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S5_5_342_Diogenicthys laternatus</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S8_5_558_Diogenicthys laternatus</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S17_3_247_Diogenicthys laternatus</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S17_4_251_Diogenicthys laternatus</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S22_4_527_Diogenicthys laternatus</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S22_5_538_Diogenicthys laternatus</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td rowspan="36" style="text-align: left; vertical-align: top !important;">Idiacanthus antrostomus</td>
+<td style="text-align: left;">DG5C_M10_S14_5_64_Idiacanthus antrostomus</td>
+<td style="text-align: right;">28</td>
+<td style="text-align: right;">18</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S22_2_504_Idiacanthus antrostomus</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S27_2_810_Idiacanthus antrostomus</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S16_4_191_Idiacanthus antrostomus</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S15_5_126_Idiacanthus antrostomus</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S19_2_356_Idiacanthus antrostomus</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S23_2_576_Idiacanthus antrostomus</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S25_2_714_Idiacanthus antrostomus</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S16_5_199_Idiacanthus antrostomus</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S1_3_42_Idiacanthus antrostomus</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S11_3_733_Idiacanthus antrostomus</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S20_2_442_Idiacanthus antrostomus</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S24_2_635_Idiacanthus antrostomus</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S19_3_368_Idiacanthus antrostomus</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S3_2_171_Idiacanthus antrostomus</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S7_2_443_Idiacanthus antrostomus</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S9_5_620_Idiacanthus antrostomus</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S16_2_166_Idiacanthus antrostomus</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S17_2_236_Idiacanthus antrostomus</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S22_3_523_Idiacanthus antrostomus</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S6_2_388_Idiacanthus antrostomus</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S13_2_869_Idiacanthus antrostomus</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S2_3_120_Idiacanthus antrostomus</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S3_3_174_Idiacanthus antrostomus</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S10_3_667_Idiacanthus antrostomus</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S3_4_191_Idiacanthus antrostomus</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S13_4_892_Idiacanthus antrostomus</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S16_1_144_Idiacanthus antrostomus</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S14_2_41_Idiacanthus antrostomus</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S18_2_301_Idiacanthus antrostomus</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S17_3_242_Idiacanthus antrostomus</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S24_3_657_Idiacanthus antrostomus</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S25_3_724_Idiacanthus antrostomus</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S17_4_253_Idiacanthus antrostomus</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S19_4_385_Idiacanthus antrostomus</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S25_4_735_Idiacanthus antrostomus</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td rowspan="31" style="text-align: left; vertical-align: top !important;">Lampanyctus parvicauda</td>
+<td style="text-align: left;">DG5C_M10_S22_1_475_Lampanyctus parvicauda</td>
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S14_5_68_Lampanyctus parvicauda</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S20_1_407_Lampanyctus parvicauda</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">9</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S23_1_545_Lampanyctus parvicauda</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">9</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S27_1_777_Lampanyctus parvicauda</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S13_1_841_Lampanyctus parvicauda</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S25_1_683_Lampanyctus parvicauda</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S20_2_422_Lampanyctus parvicauda</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S11_3_729_Lampanyctus parvicauda</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S24_1_623_Lampanyctus parvicauda</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S23_2_570_Lampanyctus parvicauda</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S15_5_121_Lampanyctus parvicauda</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S3_3_187_Lampanyctus parvicauda</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S12_3_803_Lampanyctus parvicauda</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S14_1_5_Lampanyctus parvicauda</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S16_1_143_Lampanyctus parvicauda</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S17_3_247_Lampanyctus parvicauda</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S1_1_2_Lampanyctus parvicauda</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S2_1_78_Lampanyctus parvicauda</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S5_1_287_Lampanyctus parvicauda</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S6_1_361_Lampanyctus parvicauda</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S4_2_237_Lampanyctus parvicauda</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S10_3_670_Lampanyctus parvicauda</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S13_3_880_Lampanyctus parvicauda</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S16_2_164_Lampanyctus parvicauda</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S17_2_222_Lampanyctus parvicauda</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S18_2_291_Lampanyctus parvicauda</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S19_2_359_Lampanyctus parvicauda</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S22_2_493_Lampanyctus parvicauda</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S19_3_372_Lampanyctus parvicauda</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S16_5_200_Lampanyctus parvicauda</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td rowspan="31" style="text-align: left; vertical-align: top !important;">Scopelengys tristis</td>
+<td style="text-align: left;">DG5B_M10_S1_3_39_Scopelengys tristis</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S7_2_437_Scopelengys tristis</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S10_2_644_Scopelengys tristis</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S14_2_23_Scopelengys tristis</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S17_2_221_Scopelengys tristis</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S24_3_648_Scopelengys tristis</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S9_2_573_Scopelengys tristis</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S5_2_317_Scopelengys tristis</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S8_2_505_Scopelengys tristis</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S16_2_150_Scopelengys tristis</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S6_2_373_Scopelengys tristis</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S12_2_779_Scopelengys tristis</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S13_2_855_Scopelengys tristis</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S2_3_115_Scopelengys tristis</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S18_2_289_Scopelengys tristis</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S22_2_488_Scopelengys tristis</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S23_2_558_Scopelengys tristis</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S27_2_791_Scopelengys tristis</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S25_3_723_Scopelengys tristis</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S4_2_227_Scopelengys tristis</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S11_2_713_Scopelengys tristis</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S9_3_596_Scopelengys tristis</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S15_2_88_Scopelengys tristis</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S19_2_352_Scopelengys tristis</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S24_2_627_Scopelengys tristis</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S25_2_696_Scopelengys tristis</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S17_3_244_Scopelengys tristis</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S22_3_511_Scopelengys tristis</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S23_3_585_Scopelengys tristis</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S27_3_814_Scopelengys tristis</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S18_5_322_Scopelengys tristis</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td rowspan="31" style="text-align: left; vertical-align: top !important;">Scopeloberyx malayanus</td>
+<td style="text-align: left;">DG5B_M10_S13_2_859_Scopeloberyx malayanus</td>
+<td style="text-align: right;">51</td>
+<td style="text-align: right;">23</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S24_2_639_Scopeloberyx malayanus</td>
+<td style="text-align: right;">31</td>
+<td style="text-align: right;">13</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S1_1_3_Scopeloberyx malayanus</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">9</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S25_2_703_Scopeloberyx malayanus</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S14_1_6_Scopeloberyx malayanus</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S20_2_431_Scopeloberyx malayanus</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S22_2_499_Scopeloberyx malayanus</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S2_1_79_Scopeloberyx malayanus</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S6_1_359_Scopeloberyx malayanus</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S3_1_147_Scopeloberyx malayanus</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S9_1_559_Scopeloberyx malayanus</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S11_1_694_Scopeloberyx malayanus</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S12_1_766_Scopeloberyx malayanus</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S19_1_332_Scopeloberyx malayanus</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S23_1_546_Scopeloberyx malayanus</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S23_2_574_Scopeloberyx malayanus</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S1_1_3_Scopeloberyx malayanus</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S4_1_211_Scopeloberyx malayanus</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S5_1_288_Scopeloberyx malayanus</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S9_1_559_Scopeloberyx malayanus</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S10_1_628_Scopeloberyx malayanus</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S1_2_26_Scopeloberyx malayanus</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S2_2_102_Scopeloberyx malayanus</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S5_2_316_Scopeloberyx malayanus</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S6_2_374_Scopeloberyx malayanus</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S16_1_133_Scopeloberyx malayanus</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S17_1_215_Scopeloberyx malayanus</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S18_1_273_Scopeloberyx malayanus</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S24_1_609_Scopeloberyx malayanus</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S25_1_692_Scopeloberyx malayanus</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S27_2_792_Scopeloberyx malayanus</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td rowspan="33" style="text-align: left; vertical-align: top !important;">Scopelogadus bispinosus</td>
+<td style="text-align: left;">DG5C_M10_S17_2_229_Scopelogadus bispinosus</td>
+<td style="text-align: right;">42</td>
+<td style="text-align: right;">9</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S19_2_360_Scopelogadus bispinosus</td>
+<td style="text-align: right;">57</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S14_2_24_Scopelogadus bispinosus</td>
+<td style="text-align: right;">34</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S15_2_103_Scopelogadus bispinosus</td>
+<td style="text-align: right;">45</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S18_2_302_Scopelogadus bispinosus</td>
+<td style="text-align: right;">58</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S20_2_431_Scopelogadus bispinosus</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S6_3_393_Scopelogadus bispinosus</td>
+<td style="text-align: right;">31</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S24_2_639_Scopelogadus bispinosus</td>
+<td style="text-align: right;">27</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S15_4_115_Scopelogadus bispinosus</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S11_3_730_Scopelogadus bispinosus</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S3_4_189_Scopelogadus bispinosus</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S1_3_53_Scopelogadus bispinosus</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S16_2_162_Scopelogadus bispinosus</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S22_2_499_Scopelogadus bispinosus</td>
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S25_4_737_Scopelogadus bispinosus</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S12_3_804_Scopelogadus bispinosus</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S8_4_536_Scopelogadus bispinosus</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S25_2_703_Scopelogadus bispinosus</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S5_1_299_Scopelogadus bispinosus</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S3_2_159_Scopelogadus bispinosus</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S10_2_643_Scopelogadus bispinosus</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S11_2_712_Scopelogadus bispinosus</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S12_2_785_Scopelogadus bispinosus</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S13_2_859_Scopelogadus bispinosus</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S10_3_659_Scopelogadus bispinosus</td>
+<td style="text-align: right;">26</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S13_3_879_Scopelogadus bispinosus</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S18_1_273_Scopelogadus bispinosus</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S23_2_574_Scopelogadus bispinosus</td>
+<td style="text-align: right;">26</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S27_2_792_Scopelogadus bispinosus</td>
+<td style="text-align: right;">24</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S17_3_243_Scopelogadus bispinosus</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S20_3_449_Scopelogadus bispinosus</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S14_4_51_Scopelogadus bispinosus</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S27_5_839_Scopelogadus bispinosus</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td rowspan="21" style="text-align: left; vertical-align: top !important;">Vinciguerria lucetia</td>
+<td style="text-align: left;">DG5B_M10_S13_4_896_Vinciguerria lucetia</td>
+<td style="text-align: right;">217</td>
+<td style="text-align: right;">39</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S20_4_458_Vinciguerria lucetia</td>
+<td style="text-align: right;">34</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S19_4_381_Vinciguerria lucetia</td>
+<td style="text-align: right;">43</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S14_5_61_Vinciguerria lucetia</td>
+<td style="text-align: right;">24</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S26_5_762_Vinciguerria lucetia</td>
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S27_5_838_Vinciguerria lucetia</td>
+<td style="text-align: right;">36</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S11_4_751_Vinciguerria lucetia</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S17_4_252_Vinciguerria lucetia</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S1_4_67_Vinciguerria lucetia</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S15_5_127_Vinciguerria lucetia</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S1_3_52_Vinciguerria lucetia</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S12_4_821_Vinciguerria lucetia</td>
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S22_4_530_Vinciguerria lucetia</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5B_M10_S3_4_194_Vinciguerria lucetia</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5B_M10_S6_4_412_Vinciguerria lucetia</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S18_4_316_Vinciguerria lucetia</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S23_4_595_Vinciguerria lucetia</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S26_4_752_Vinciguerria lucetia</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S16_5_198_Vinciguerria lucetia</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DG5C_M10_S19_5_401_Vinciguerria lucetia</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DG5C_M10_S25_5_742_Vinciguerria lucetia</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">1</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+<p>Now we are ready to start dissecting and collecting actual data.</p>
 </section>
 
 </main>
